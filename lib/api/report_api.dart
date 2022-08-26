@@ -8,10 +8,8 @@ class ReportApi {
   final String url = "localhost:8080";
 
   Future<void> submitReport(Report report) async {
-    final response = await client.post(Uri.http(url, 'report'),
+    await client.post(Uri.http(url, 'report'),
         headers: {"Accept": "application/json", "content-type": "application/json"},
         body: jsonEncode(report));
-    print(jsonEncode(report));
-    print(response.statusCode);
   }
 }

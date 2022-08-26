@@ -41,6 +41,14 @@ class Room {
   }
 
   String getStatusString() {
+    if (type == RoomType.pod) {
+      print("Pod with popularity: ${popularity} and removal: ${removalChance}");
+      if ((popularity ?? Popularity.empty) == Popularity.empty &&
+          (removalChance ?? RemovalChance.low) == RemovalChance.low) {
+        return "Available";
+      }
+      return "Occupied";
+    }
     if (popularity == Popularity.very_busy || removalChance == RemovalChance.definite) {
       return "Very busy";
     }
@@ -49,7 +57,7 @@ class Room {
       return "Busy";
     }
 
-    if ((popularity ?? Popularity.empty).index > Popularity.medium.index) {
+    if ((popularity ?? Popularity.empty).index >= Popularity.medium.index) {
       return "Moderately busy";
     }
 
@@ -65,8 +73,8 @@ class Room {
       return Colors.red;
     }
 
-    if ((popularity ?? Popularity.empty).index > Popularity.medium.index) {
-      return Colors.yellow;
+    if ((popularity ?? Popularity.empty).index >= Popularity.medium.index) {
+      return const Color(0xFFF1C21B);
     }
 
     return Colors.green;

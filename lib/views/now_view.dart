@@ -39,16 +39,13 @@ class _NowViewState extends State<NowView> {
 
   @override
   Widget build(BuildContext context) {
-    print("RENDERING");
     return FutureBuilder(
         future: _roomList,
         builder: ((context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            print("LOADING");
             return const Center(child: CircularProgressIndicator());
           }
           if (_rooms == null) {
-            print("NO ROOMS");
             return const Center(child: CircularProgressIndicator());
           }
           _rooms = _rooms!
