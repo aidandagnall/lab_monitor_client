@@ -4,8 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/views/pod_room_card.dart';
-import 'package:lab_availability_checker/views/room_card.dart';
-import 'package:lab_availability_checker/views/room_card_2.dart';
+import 'package:lab_availability_checker/views/large_room_card.dart';
 import 'package:lab_availability_checker/views/small_room_card.dart';
 
 class NowView extends StatefulWidget {
@@ -121,7 +120,7 @@ class _NowViewState extends State<NowView> {
                           child = _podRows[index - _labs.length];
                         } else {
                           child = _labs[index].name == "A32"
-                              ? RoomCard2(room: _labs[index])
+                              ? LargeRoomCard(room: _labs[index])
                               : SmallRoomCard(room: _labs[index]);
                         }
                         return AnimationConfiguration.staggeredList(
