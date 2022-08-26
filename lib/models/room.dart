@@ -58,7 +58,7 @@ class Room {
     }
 
     if ((popularity ?? Popularity.empty).index >= Popularity.medium.index) {
-      return "Moderately busy";
+      return "Fairly busy";
     }
 
     return "Quiet";
