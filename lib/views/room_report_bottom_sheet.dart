@@ -19,21 +19,28 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           color: Theme.of(context).colorScheme.surface),
       child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Submit a live report for ${widget.room.name}"),
+              Text(
+                "Submit a live report for ${widget.room.name}",
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(height: 20),
               Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(children: [
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        const Text("Empty"),
+                        const Text(
+                          "Empty",
+                          style: TextStyle(fontSize: 18),
+                        ),
                         Expanded(
                             child: Slider(
                           value: popularity.index.toDouble(),
@@ -44,7 +51,10 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                           max: 4,
                           divisions: widget.room.type == RoomType.lab ? 4 : 1,
                         )),
-                        const Text("Full"),
+                        const Text(
+                          "Full",
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -52,7 +62,10 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Asked to leave"),
+                        const Text(
+                          "Asked to leave",
+                          style: TextStyle(fontSize: 18),
+                        ),
                         Switch(
                             value: beenRemoved,
                             onChanged: (value) => setState(
@@ -60,7 +73,7 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                                 ))
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -73,12 +86,17 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                                       beenRemoved ? RemovalChance.definite : RemovalChance.low));
                               Navigator.pop(context);
                             },
-                            child: const Text("Submit"))
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(15))))),
+                            child: const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text("Submit", style: TextStyle(fontSize: 20))))
                       ],
                     )
                   ])),
               const SizedBox(
-                height: 40,
+                height: 10,
               )
             ],
           )),
