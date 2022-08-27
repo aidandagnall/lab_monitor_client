@@ -14,8 +14,11 @@ class PodRoomCard extends StatelessWidget {
         semanticContainer: true,
         margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 8,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        color: Theme.of(context).colorScheme.surfaceVariant,
         child: RoomCard(
             room: room,
             child: SizedBox(
@@ -31,7 +34,7 @@ class PodRoomCard extends StatelessWidget {
                                 fit: BoxFit.fitWidth,
                                 child: Text(room.name,
                                     style: GoogleFonts.openSans(
-                                      color: Colors.black,
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                                       fontSize: 24,
                                       fontWeight: FontWeight.w400,
                                     ))))),

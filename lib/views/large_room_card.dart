@@ -17,58 +17,89 @@ class LargeRoomCard extends StatelessWidget {
         semanticContainer: true,
         margin: const EdgeInsets.only(top: 20, bottom: 10),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 8,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: RoomCard(
           room: room,
           child: Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                  child: Stack(children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: 180,
-                          child: Image.asset(
-                            'assets/images/a32.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10))),
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 0),
-                                        child: Text(room.name,
-                                            style: GoogleFonts.openSans(
-                                              color: Colors.black,
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.w400,
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 0, right: 5),
-                                        child: StatusIndicator(room: room),
-                                      )
-                                    ],
-                                  )
-                                ]))),
-                  ])),
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    height: 180,
+                    child: Image.asset(
+                      'assets/images/a32.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  )),
+              // Stack(children: [
+              //   ClipRRect(
+              //       borderRadius: BorderRadius.circular(10),
+              //       child: Container(
+              //         height: 180,
+              //         child: Image.asset(
+              //           'assets/images/a32.jpg',
+              //           fit: BoxFit.cover,
+              //         ),
+              //       )),
+              //   Container(
+              //       // constraints: BoxConstraints(maxWidth: 100),
+              //       decoration: BoxDecoration(
+              //           color: Theme.of(context).colorScheme.primaryContainer,
+              //           borderRadius: const BorderRadius.only(bottomRight: Radius.circular(10))),
+              //       child: Padding(
+              //           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              //           child: Row(
+              //               mainAxisSize: MainAxisSize.min,
+              //               // mainAxisAlignment: MainAxisAlignment.start,
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Column(
+              //                   crossAxisAlignment: CrossAxisAlignment.center,
+              //                   children: [
+              //                     Padding(
+              //                       padding: const EdgeInsets.symmetric(vertical: 0),
+              //                       child: Text(room.name,
+              //                           style: GoogleFonts.openSans(
+              //                             color: Theme.of(context).colorScheme.onSurfaceVariant,
+              //                             fontSize: 28,
+              //                             fontWeight: FontWeight.w400,
+              //                           )),
+              //                     ),
+              //                     Padding(
+              //                       padding: const EdgeInsets.only(left: 0, right: 5),
+              //                       child: StatusIndicator(room: room),
+              //                     )
+              //                   ],
+              //                 )
+              //               ]))),
+              // ]),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(left: 25),
+                          child: SizedBox(
+                              width: 50,
+                              child: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(room.name,
+                                      style: GoogleFonts.openSans(
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w400,
+                                      ))))),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: StatusIndicator(room: room)),
+                    ],
+                  ),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Row(
@@ -85,18 +116,6 @@ class LargeRoomCard extends StatelessWidget {
                                       width: 145,
                                       child: Center(child: Text("No Lab Scheduled")))
                                   : LabBubble(lab: room.currentLab)
-                              // lab: Lab(
-                              //     day: 1,
-                              //     rooms: [
-                              //       Room(name: 'a32', size: RoomSize.large, type: RoomType.lab)
-                              //     ],
-                              //     module: Module(
-                              //         code: "COMP1003",
-                              //         name: "Dr Max L Wilson",
-                              //         convenor: ["Test"]),
-                              //     startTime: "1100",
-                              //     endTime: "1300",
-                              //     removalChance: RemovalChance.high)
                             ],
                           ),
 
@@ -112,14 +131,6 @@ class LargeRoomCard extends StatelessWidget {
                                   : LabBubble(lab: room.nextLab)
                             ],
                           ),
-
-                          // Padding(
-                          //     padding: EdgeInsets.symmetric(horizontal: 10),
-                          //     child: room.currentLab == null
-                          //         ? Column(children: [Text("No Labs Scheduled")])
-                          //         : Column(
-                          //             children: [Text("Currently On:")],
-                          //           )),
                         ],
                       ))
                 ],

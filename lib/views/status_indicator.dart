@@ -11,7 +11,7 @@ class StatusIndicator extends StatefulWidget {
   createState() => _StatusIndicatorState();
 }
 
-class _StatusIndicatorState extends State<StatusIndicator> with SingleTickerProviderStateMixin {
+class _StatusIndicatorState extends State<StatusIndicator> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +26,9 @@ class _StatusIndicatorState extends State<StatusIndicator> with SingleTickerProv
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
               Text(
                 widget.room.getStatusString(),
-                style: GoogleFonts.openSans(),
+                style: GoogleFonts.openSans(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               )
             ]))
           ],

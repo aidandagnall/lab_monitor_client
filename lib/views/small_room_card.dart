@@ -14,8 +14,11 @@ class SmallRoomCard extends StatelessWidget {
         semanticContainer: true,
         margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 8,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        color: Theme.of(context).colorScheme.surfaceVariant,
         child: RoomCard(
           room: room,
           child: Padding(
@@ -29,7 +32,7 @@ class SmallRoomCard extends StatelessWidget {
                             fit: BoxFit.fitWidth,
                             child: Text(room.name,
                                 style: GoogleFonts.openSans(
-                                  color: Colors.black,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   fontSize: 24,
                                   fontWeight: FontWeight.w400,
                                 ))))),
@@ -44,7 +47,9 @@ class SmallRoomCard extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 5),
                               child: Text(
                                 "No more labs today",
-                                style: GoogleFonts.openSans(),
+                                style: GoogleFonts.openSans(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
                               )))),
                 if (room.currentLab != null) Row(children: [LabBubble(lab: room.currentLab)]),
                 if (room.currentLab == null && room.nextLab != null)
