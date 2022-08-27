@@ -8,20 +8,8 @@ class LabBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (lab == null) {
-    //   return Card(
-    //       color: Theme.of(context).primaryColor,
-    //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-    //       child: const Padding(
-    //           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-    //           child: Center(
-    //               child: Text(
-    //             "No Lab Scheduled",
-    //             style: TextStyle(color: Colors.white),
-    //           ))));
-    // }
     return Card(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -30,7 +18,7 @@ class LabBubble extends StatelessWidget {
               padding: const EdgeInsets.only(right: 5),
               child: Icon(
                 lab!.getIcon(),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
             Column(
@@ -38,11 +26,14 @@ class LabBubble extends StatelessWidget {
               children: [
                 Text(
                   lab!.module.code,
-                  style: GoogleFonts.openSans(color: Colors.white, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.openSans(
+                      color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
                 ),
                 Text(
                   lab!.getStartTime() + " - " + lab!.getEndTime(),
-                  style: GoogleFonts.openSans(color: Colors.white),
+                  style: GoogleFonts.openSans(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                 )
               ],
             )
