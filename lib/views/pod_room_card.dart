@@ -14,11 +14,9 @@ class PodRoomCard extends StatelessWidget {
         semanticContainer: true,
         margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        color: Theme.of(context).colorScheme.surfaceVariant,
         child: RoomCard(
             room: room,
             child: SizedBox(

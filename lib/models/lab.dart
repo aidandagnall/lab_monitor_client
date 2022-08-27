@@ -20,6 +20,22 @@ class Lab {
       required this.rooms});
 
   factory Lab.fromJson(Map<String, dynamic> json) {
+    print("Extracting lab");
+    print(json);
+    try {
+      var t = Lab(
+          module: Module.fromJson(json['module']),
+          day: json['day'],
+          startTime: json['startTime'],
+          endTime: json['endTime'],
+          removalChance: json['removalChance'] == null
+              ? null
+              : RemovalChance.values
+                  .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']),
+          rooms: []);
+    } catch (on, stackTrace) {
+      print(stackTrace);
+    }
     return Lab(
         module: Module.fromJson(json['module']),
         day: json['day'],
@@ -29,7 +45,8 @@ class Lab {
             ? null
             : RemovalChance.values
                 .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']),
-        rooms: json['rooms'].map<Room>((json) => Room.fromJson(json)).toList());
+        // rooms: json['rooms'].map<Room>((json) => Room.fromJson(json)).toList()
+        rooms: []);
   }
 
   String getStartTime() {

@@ -6,6 +6,8 @@ class Module {
   Module({required this.code, required this.name, required this.convenor});
 
   factory Module.fromJson(Map<String, dynamic> json) {
+    print("module");
+    print(json);
     return Module(
       code: json['code'],
       name: json['name'],

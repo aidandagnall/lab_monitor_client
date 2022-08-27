@@ -19,14 +19,14 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
   @override
   Widget build(BuildContext context) {
     return Card(
-        semanticContainer: true,
+        // semanticContainer: true,
         margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 0,
+        // elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        // color: Theme.of(context).colorScheme.surfaceVariant,
         child: AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.ease,
@@ -48,14 +48,15 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                           child: SizedBox(
                             height: 180,
                             child: Ink.image(
-                              image: AssetImage('assets/images/a32.jpg'),
+                              image: const AssetImage('assets/images/a32.jpg'),
                               fit: BoxFit.cover,
                             ),
                           )),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         child: Stack(children: [
-                          Row(
+                          Positioned.fill(
+                              child: Row(
                             children: [
                               Padding(
                                   padding: const EdgeInsets.only(left: 5),
@@ -82,11 +83,9 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                           alignment: _selected
                                               ? Alignment.centerRight
                                               : Alignment.centerLeft,
-                                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                                            Center(child: StatusIndicator(room: widget.room))
-                                          ]))))
+                                          child: StatusIndicator(room: widget.room))))
                             ],
-                          ),
+                          )),
                           Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -111,17 +110,20 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                                   ))))),
                                 if (widget.room.currentLab != null)
                                   AnimatedOpacity(
-                                    curve: Curves.ease,
-                                    opacity: _selected ? 0 : 1,
-                                    duration: const Duration(milliseconds: 300),
-                                    child: Row(children: [LabBubble(lab: widget.room.currentLab)]),
-                                  ),
+                                      curve: Curves.ease,
+                                      opacity: _selected ? 0 : 1,
+                                      duration: const Duration(milliseconds: 300),
+                                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                                        Center(child: LabBubble(lab: widget.room.currentLab))
+                                      ])),
                                 if (widget.room.currentLab == null && widget.room.nextLab != null)
                                   AnimatedOpacity(
                                       curve: Curves.ease,
                                       opacity: _selected ? 0 : 1,
                                       duration: const Duration(milliseconds: 300),
-                                      child: Row(children: [LabBubble(lab: widget.room.nextLab)])),
+                                      child: Row(children: [
+                                        Center(child: LabBubble(lab: widget.room.nextLab))
+                                      ])),
                               ])
                         ])),
                     AnimatedSize(
@@ -129,7 +131,7 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                         curve: Curves.ease,
                         child: _selected
                             ? Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [

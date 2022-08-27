@@ -44,8 +44,18 @@ class MyApp extends StatelessWidget {
                               : SystemUiOverlayStyle.light);
                       return MaterialApp(
                           title: 'UoN Lab Monitor',
-                          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-                          darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+                          theme: ThemeData(
+                            useMaterial3: true,
+                            colorSchemeSeed: const Color(0xFF005597),
+                            brightness: Brightness.light,
+                            // colorScheme: lightColorScheme
+                          ),
+                          darkTheme: ThemeData(
+                            useMaterial3: true,
+                            // colorScheme: darkColorScheme
+                            colorSchemeSeed: const Color(0xFF005597),
+                            brightness: Brightness.dark,
+                          ),
                           themeMode: themeProvider.selectedMode,
                           home: child);
                     }));

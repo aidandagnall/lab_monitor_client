@@ -23,21 +23,28 @@ class Room {
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
-    return Room(
-        name: json['name'],
-        reportCount: json['reportCount'],
-        currentLab: json['currentLab'] != null ? Lab.fromJson(json['currentLab']) : null,
-        nextLab: json['nextLab'] != null ? Lab.fromJson(json['nextLab']) : null,
-        size: RoomSize.values.firstWhere((e) => e.toString() == "RoomSize." + json['size']),
-        type: RoomType.values.firstWhere((e) => e.toString() == "RoomType." + json['type']),
-        popularity: json['popularity'] == null
-            ? null
-            : Popularity.values
-                .firstWhere((e) => e.toString() == "Popularity." + json['popularity']),
-        removalChance: json['removalChance'] == null
-            ? null
-            : RemovalChance.values
-                .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']));
+    Room? t;
+    print(json);
+    try {
+      t = Room(
+          name: json['name'],
+          reportCount: json['reportCount'],
+          currentLab: json['currentLab'] != null ? Lab.fromJson(json['currentLab']) : null,
+          nextLab: json['nextLab'] != null ? Lab.fromJson(json['nextLab']) : null,
+          size: RoomSize.values.firstWhere((e) => e.toString() == "RoomSize." + json['size']),
+          type: RoomType.values.firstWhere((e) => e.toString() == "RoomType." + json['type']),
+          popularity: json['popularity'] == null
+              ? null
+              : Popularity.values
+                  .firstWhere((e) => e.toString() == "Popularity." + json['popularity']),
+          removalChance: json['removalChance'] == null
+              ? null
+              : RemovalChance.values
+                  .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']));
+    } catch (on, stackTrace) {
+      print(stackTrace);
+    }
+    return t!;
   }
 
   String getStatusString() {
