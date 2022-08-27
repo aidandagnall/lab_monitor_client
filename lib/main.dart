@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:lab_availability_checker/color_schemes.g.dart';
+import 'package:lab_availability_checker/theme.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
+import 'package:lab_availability_checker/views/settings_view.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // transparent status bar
   ));
   runApp(const MyApp());
@@ -18,34 +23,36 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'UoN Lab Monitor',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: const MaterialColor(0xFF133769, <int, Color>{
-          50: Color.fromRGBO(19, 55, 105, 0.1),
-          100: Color.fromRGBO(19, 55, 105, 0.2),
-          200: Color.fromRGBO(19, 55, 105, 0.3),
-          300: Color.fromRGBO(19, 55, 105, 0.4),
-          400: Color.fromRGBO(19, 55, 105, 0.5),
-          500: Color.fromRGBO(19, 55, 105, 0.6),
-          600: Color.fromRGBO(19, 55, 105, 0.7),
-          700: Color.fromRGBO(19, 55, 105, 0.8),
-          800: Color.fromRGBO(19, 55, 105, 0.9),
-          900: Color.fromRGBO(19, 55, 105, 1),
-        }),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return FutureBuilder<SharedPreferences>(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                      create: (_) => ThemeProvider.initial(
+                          (snapshot.data!.getBool('settings/dark-mode') ?? false)
+                              ? ThemeMode.dark
+                              : ThemeMode.light))
+                ],
+                child: Consumer<ThemeProvider>(
+                    child: const MyHomePage(title: 'Flutter Demo Home Page'),
+                    builder: (c, themeProvider, child) {
+                      SystemChrome.setSystemUIOverlayStyle(
+                          themeProvider.selectedMode == ThemeMode.light
+                              ? SystemUiOverlayStyle.dark
+                              : SystemUiOverlayStyle.light);
+                      return MaterialApp(
+                          title: 'UoN Lab Monitor',
+                          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+                          darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+                          themeMode: themeProvider.selectedMode,
+                          home: child);
+                    }));
+          }
+          return const MaterialApp(
+              home: Scaffold(body: Center(child: CircularProgressIndicator())));
+        });
   }
 }
 
@@ -70,19 +77,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget?> states = [
     Container(),
-    NowView(),
-    Container(),
+    const NowView(),
+    const SettingsView(),
   ];
   int currentPage = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       // appBar: AppBar(
       //   toolbarHeight: 0,
       //   systemOverlayStyle: SystemUiOverlayStyle.dark,
       //   elevation: 0,
       //   backgroundColor: Colors.transparent,
       // ),
+      // body: SafeArea(top: false, child: NowView())
       body: SafeArea(top: false, child: states[currentPage]!),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() {
@@ -90,10 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
           print(currentPage);
         }),
         currentIndex: currentPage,
+        backgroundColor: Theme.of(context).colorScheme.background,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.view_agenda), label: "Today"),
           BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
-          BottomNavigationBarItem(icon: Icon(Icons.room), label: "Rooms"),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
         ],
       ),
     );
