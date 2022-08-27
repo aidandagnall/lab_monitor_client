@@ -43,7 +43,24 @@ class _SettingsViewState extends State<SettingsView> {
                           .setSelectedThemeMode(value ? ThemeMode.dark : ThemeMode.light));
                 })
               ],
-            )
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: const [
+                    Center(child: Text("Created by Aidan Dagnall")),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                        child: Text(
+                            "Thanks to Ben Flynn and Joe Sienawski for their contributions in creating designs for this app",
+                            textAlign: TextAlign.center)),
+                  ],
+                ))
           ],
         ));
   }
