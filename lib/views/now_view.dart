@@ -106,7 +106,7 @@ class _NowViewState extends State<NowView> {
               child: RefreshIndicator(
                   key: _refreshIndicatorKey,
                   onRefresh: () => _refreshRooms(),
-                  edgeOffset: 40,
+                  edgeOffset: 100,
                   child: AnimationLimiter(
                     child: ListView.builder(
                       shrinkWrap: true,
