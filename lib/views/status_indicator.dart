@@ -14,25 +14,24 @@ class StatusIndicator extends StatefulWidget {
 class _StatusIndicatorState extends State<StatusIndicator> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 90,
+    return IntrinsicWidth(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-                padding: const EdgeInsets.only(left: 2, right: 8),
-                child: _StatusLight(color: widget.room.getStatusColour())),
-            Flexible(
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text(
-                widget.room.getStatusString(),
-                style: GoogleFonts.openSans(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
-            ]))
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+            padding: const EdgeInsets.only(left: 2, right: 8),
+            child: _StatusLight(color: widget.room.getStatusColour())),
+        Flexible(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text(
+            widget.room.getStatusString(),
+            style: GoogleFonts.openSans(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          )
+        ]))
+      ],
+    ));
   }
 }
 

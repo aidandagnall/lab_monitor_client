@@ -5,7 +5,7 @@ import 'package:lab_availability_checker/models/room.dart';
 
 class ReportApi {
   final client = http.Client();
-  final String url = "localhost:8080";
+  final String url = "uon-lab-monitor.herokuapp.com";
 
   Future<void> submitReport(Report report) async {
     await client.post(Uri.http(url, 'report'),

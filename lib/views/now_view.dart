@@ -119,11 +119,13 @@ class _NowViewState extends State<NowView> {
                         } else {
                           child = ExpandableRoomCard(room: _labs[index]);
                         }
-                        return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 400),
-                            child: SlideAnimation(
-                                verticalOffset: 50, child: FadeInAnimation(child: child)));
+                        return Padding(
+                            padding: EdgeInsets.only(top: index == 0 ? 40 : 0),
+                            child: AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 400),
+                                child: SlideAnimation(
+                                    verticalOffset: 50, child: FadeInAnimation(child: child))));
                       },
                     ),
                   )));

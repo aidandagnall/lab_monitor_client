@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/room.dart';
@@ -20,22 +19,6 @@ class Lab {
       required this.rooms});
 
   factory Lab.fromJson(Map<String, dynamic> json) {
-    print("Extracting lab");
-    print(json);
-    try {
-      var t = Lab(
-          module: Module.fromJson(json['module']),
-          day: json['day'],
-          startTime: json['startTime'],
-          endTime: json['endTime'],
-          removalChance: json['removalChance'] == null
-              ? null
-              : RemovalChance.values
-                  .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']),
-          rooms: []);
-    } catch (on, stackTrace) {
-      print(stackTrace);
-    }
     return Lab(
         module: Module.fromJson(json['module']),
         day: json['day'],
@@ -45,8 +28,7 @@ class Lab {
             ? null
             : RemovalChance.values
                 .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']),
-        // rooms: json['rooms'].map<Room>((json) => Room.fromJson(json)).toList()
-        rooms: []);
+        rooms: json['rooms'].map<Room>((json) => Room.fromJson(json)).toList());
   }
 
   String getStartTime() {
@@ -58,6 +40,7 @@ class Lab {
   }
 
   IconData getIcon() {
+    print(this);
     switch (removalChance) {
       case null:
       case RemovalChance.low:

@@ -11,7 +11,7 @@ class RoomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => showModalBottomSheet(
+      onLongPress: () => showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           shape: const RoundedRectangleBorder(

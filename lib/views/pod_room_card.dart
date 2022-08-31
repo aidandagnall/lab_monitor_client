@@ -36,12 +36,13 @@ class PodRoomCard extends StatelessWidget {
                                       fontSize: 24,
                                       fontWeight: FontWeight.w400,
                                     ))))),
+                    const Spacer(),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: const EdgeInsets.only(left: 15),
+                              padding: const EdgeInsets.only(left: 15, right: 10),
                               child: StatusIndicator(room: room)),
                         ])
                   ])),

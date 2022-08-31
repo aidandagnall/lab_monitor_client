@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:lab_availability_checker/color_schemes.g.dart';
 import 'package:lab_availability_checker/theme.dart';
@@ -8,7 +6,6 @@ import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

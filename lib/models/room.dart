@@ -52,10 +52,11 @@ class Room {
       print("Pod with popularity: ${popularity} and removal: ${removalChance}");
       if ((popularity ?? Popularity.empty) == Popularity.empty &&
           (removalChance ?? RemovalChance.low) == RemovalChance.low) {
-        return "Available";
+        return "Free";
       }
-      return "Occupied";
+      return "In use";
     }
+
     if (popularity == Popularity.very_busy || removalChance == RemovalChance.definite) {
       return "Very busy";
     }

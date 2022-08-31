@@ -32,6 +32,9 @@ class _SettingsViewState extends State<SettingsView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -48,7 +51,7 @@ class _SettingsViewState extends State<SettingsView> {
               height: 40,
             ),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   children: const [
                     Center(child: Text("Created by Aidan Dagnall")),
