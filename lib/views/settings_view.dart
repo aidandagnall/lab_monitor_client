@@ -60,7 +60,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     Center(
                         child: Text(
-                            "Thanks to Ben Flynn and Joe Sienawski for their contributions in creating designs for this app",
+                            "Thanks to Ben Flynn and Joe Sieniawski for their contributions in creating designs for this app",
                             textAlign: TextAlign.center)),
                   ],
                 ))
