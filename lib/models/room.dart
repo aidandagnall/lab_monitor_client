@@ -24,32 +24,26 @@ class Room {
 
   factory Room.fromJson(Map<String, dynamic> json) {
     Room? t;
-    print(json);
-    try {
-      t = Room(
-          name: json['name'],
-          reportCount: json['reportCount'],
-          currentLab: json['currentLab'] != null ? Lab.fromJson(json['currentLab']) : null,
-          nextLab: json['nextLab'] != null ? Lab.fromJson(json['nextLab']) : null,
-          size: RoomSize.values.firstWhere((e) => e.toString() == "RoomSize." + json['size']),
-          type: RoomType.values.firstWhere((e) => e.toString() == "RoomType." + json['type']),
-          popularity: json['popularity'] == null
-              ? null
-              : Popularity.values
-                  .firstWhere((e) => e.toString() == "Popularity." + json['popularity']),
-          removalChance: json['removalChance'] == null
-              ? null
-              : RemovalChance.values
-                  .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']));
-    } catch (on, stackTrace) {
-      print(stackTrace);
-    }
-    return t!;
+    t = Room(
+        name: json['name'],
+        reportCount: json['reportCount'],
+        currentLab: json['currentLab'] != null ? Lab.fromJson(json['currentLab']) : null,
+        nextLab: json['nextLab'] != null ? Lab.fromJson(json['nextLab']) : null,
+        size: RoomSize.values.firstWhere((e) => e.toString() == "RoomSize." + json['size']),
+        type: RoomType.values.firstWhere((e) => e.toString() == "RoomType." + json['type']),
+        popularity: json['popularity'] == null
+            ? null
+            : Popularity.values
+                .firstWhere((e) => e.toString() == "Popularity." + json['popularity']),
+        removalChance: json['removalChance'] == null
+            ? null
+            : RemovalChance.values
+                .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']));
+    return t;
   }
 
   String getStatusString() {
     if (type == RoomType.pod) {
-      print("Pod with popularity: ${popularity} and removal: ${removalChance}");
       if ((popularity ?? Popularity.empty) == Popularity.empty &&
           (removalChance ?? RemovalChance.low) == RemovalChance.low) {
         return "Free";

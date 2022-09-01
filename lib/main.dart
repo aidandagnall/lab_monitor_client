@@ -121,7 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() {
           currentPage = value;
-          print(currentPage);
         }),
         currentIndex: currentPage,
         backgroundColor: Theme.of(context).colorScheme.background,

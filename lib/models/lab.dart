@@ -40,7 +40,6 @@ class Lab {
   }
 
   IconData getIcon() {
-    print(this);
     switch (removalChance) {
       case null:
       case RemovalChance.low:
