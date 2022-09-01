@@ -20,6 +20,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final lightTheme = ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: const Color(0xFF005597),
+      brightness: Brightness.light,
+    );
+    final darkTheme = ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: const Color(0xFF005597),
+      brightness: Brightness.dark,
+    );
+
     return FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -35,24 +46,31 @@ class MyApp extends StatelessWidget {
                 child: Consumer<ThemeProvider>(
                     child: const MyHomePage(title: 'Flutter Demo Home Page'),
                     builder: (c, themeProvider, child) {
-                      SystemChrome.setSystemUIOverlayStyle(
-                          themeProvider.selectedMode == ThemeMode.light
-                              ? SystemUiOverlayStyle.dark
-                              : SystemUiOverlayStyle.light);
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                          // statusBarColor: Theme.of(context).colorScheme.surface,
+                          // statusBarColor: themeProvider.selectedMode == ThemeMode.light
+                          //     ? lightTheme.colorScheme.surface
+                          //     : darkTheme.colorScheme.surface, // transparent status bar
+                          // statusBarIconBrightness: ,
+                          statusBarColor: Colors.transparent, // transparent status bar
+                          statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
+                              ? Brightness.light
+                              : Brightness.dark,
+                          statusBarIconBrightness: themeProvider.selectedMode == ThemeMode.light
+                              ? Brightness.dark
+                              : Brightness.light,
+                          systemNavigationBarColor: themeProvider.selectedMode == ThemeMode.light
+                              ? lightTheme.colorScheme.surface
+                              : darkTheme.colorScheme.surface,
+                          systemNavigationBarIconBrightness:
+                              themeProvider.selectedMode == ThemeMode.light
+                                  ? Brightness.dark
+                                  : Brightness.light));
                       return MaterialApp(
+                          debugShowCheckedModeBanner: false,
                           title: 'UoN Lab Monitor',
-                          theme: ThemeData(
-                            useMaterial3: true,
-                            colorSchemeSeed: const Color(0xFF005597),
-                            brightness: Brightness.light,
-                            // colorScheme: lightColorScheme
-                          ),
-                          darkTheme: ThemeData(
-                            useMaterial3: true,
-                            // colorScheme: darkColorScheme
-                            colorSchemeSeed: const Color(0xFF005597),
-                            brightness: Brightness.dark,
-                          ),
+                          theme: lightTheme,
+                          darkTheme: darkTheme,
                           themeMode: themeProvider.selectedMode,
                           home: child);
                     }));
