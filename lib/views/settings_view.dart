@@ -81,8 +81,7 @@ class _SettingsViewState extends State<SettingsView> {
                                           name: "Programming for Computer Scientists",
                                           convenor: ["Jamie Twycross"]).getModuleCodeWithStyle(e))))
                                   .toList(),
-                              onChanged: (style) =>
-                                  setState(() => provider.setSelectedStyle(style!)),
+                              onChanged: (style) => provider.setSelectedStyle(style!),
                             ))))
                   ],
                 )),
@@ -97,6 +96,13 @@ class _SettingsViewState extends State<SettingsView> {
                           value: provider.expanded,
                           onChanged: (value) => provider.setExpanded(value)))
                 ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Hint: You can long-press on a room to submit a live report!",
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(
