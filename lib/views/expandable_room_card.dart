@@ -6,8 +6,9 @@ import 'package:lab_availability_checker/views/room_report_bottom_sheet.dart';
 import 'package:lab_availability_checker/views/status_indicator.dart';
 
 class ExpandableRoomCard extends StatefulWidget {
-  const ExpandableRoomCard({Key? key, required this.room}) : super(key: key);
+  const ExpandableRoomCard({Key? key, required this.room, this.expanded = false}) : super(key: key);
   final Room room;
+  final bool expanded;
   @override
   createState() => _ExpandableRoomCardState();
 }
@@ -15,6 +16,12 @@ class ExpandableRoomCard extends StatefulWidget {
 class _ExpandableRoomCardState extends State<ExpandableRoomCard>
     with SingleTickerProviderStateMixin {
   bool _selected = false;
+
+  @override
+  void initState() {
+    _selected = widget.expanded;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

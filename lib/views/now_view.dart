@@ -5,6 +5,9 @@ import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/views/expandable_room_card.dart';
 import 'package:lab_availability_checker/views/pod_room_card.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/expanded_card_provider.dart';
 
 class NowView extends StatefulWidget {
   const NowView({Key? key}) : super(key: key);
@@ -113,7 +116,11 @@ class _NowViewState extends State<NowView> {
                         if (index >= _labs.length) {
                           child = _podRows[index - _labs.length];
                         } else {
-                          child = ExpandableRoomCard(room: _labs[index]);
+                          child = Consumer<ExpandedCardProvider>(
+                              builder: (ctx, provider, value) => ExpandableRoomCard(
+                                    room: _labs[index],
+                                    expanded: provider.expanded,
+                                  ));
                         }
                         return Padding(
                             padding: EdgeInsets.only(top: index == 0 ? 40 : 0),

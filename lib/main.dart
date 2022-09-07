@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
-import 'package:lab_availability_checker/util/module_code_provider.dart';
-import 'package:lab_availability_checker/util/theme_provider.dart';
+import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
+import 'package:lab_availability_checker/providers/module_code_provider.dart';
+import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(
                     create: (_) => ModuleCodeStyleProvider.initial(ModuleCodeStyle
                         .values[snapshot.data!.getInt('settings/module-code-style') ?? 0]),
-                  )
+                  ),
+                  ChangeNotifierProvider(
+                      create: (_) => ExpandedCardProvider.initial(
+                          snapshot.data!.getBool('settings/expanded-cards') ?? false))
                 ],
                 child: Consumer<ThemeProvider>(
                     child: const MyHomePage(),

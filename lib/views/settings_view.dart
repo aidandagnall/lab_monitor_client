@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
-import 'package:lab_availability_checker/util/module_code_provider.dart';
-import 'package:lab_availability_checker/util/theme_provider.dart';
+import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
+import 'package:lab_availability_checker/providers/module_code_provider.dart';
+import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,6 +86,19 @@ class _SettingsViewState extends State<SettingsView> {
                             ))))
                   ],
                 )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Auto Expand Rooms"),
+                  Consumer<ExpandedCardProvider>(
+                      builder: (ctx, provider, child) => Switch(
+                          value: provider.expanded,
+                          onChanged: (value) => provider.setExpanded(value)))
+                ],
+              ),
+            ),
             const SizedBox(
               height: 40,
             ),
