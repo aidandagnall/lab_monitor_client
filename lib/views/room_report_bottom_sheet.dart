@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/api/report_api.dart';
-import 'package:lab_availability_checker/models/lab.dart';
 import 'package:lab_availability_checker/models/popularity.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
 import 'package:lab_availability_checker/models/report.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lab_availability_checker/models/lab.dart';
 import 'package:lab_availability_checker/models/room.dart';
 
 class StatusIndicator extends StatefulWidget {
