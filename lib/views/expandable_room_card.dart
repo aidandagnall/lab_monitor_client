@@ -105,14 +105,16 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                           child: Center(
                                               child: Padding(
                                                   padding: const EdgeInsets.only(right: 5),
-                                                  child: Text(
-                                                    "No more labs today",
-                                                    style: GoogleFonts.openSans(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurfaceVariant,
-                                                    ),
-                                                  ))))),
+                                                  child: FittedBox(
+                                                      fit: BoxFit.fitWidth,
+                                                      child: Text(
+                                                        "No more labs today",
+                                                        style: GoogleFonts.openSans(
+                                                          color: Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurfaceVariant,
+                                                        ),
+                                                      )))))),
                                 if (widget.room.currentLab != null)
                                   AnimatedOpacity(
                                       curve: Curves.ease,
