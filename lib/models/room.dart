@@ -83,6 +83,18 @@ class Room {
 
     return Colors.green;
   }
+
+  // Used for creating the slider in the report Bottom Sheet
+  int getNumberOfPopularityIntervals() {
+    switch (size) {
+      case RoomSize.large:
+        return 4;
+      case RoomSize.medium:
+        return 2;
+      case RoomSize.small:
+        return 1;
+    }
+  }
 }
 
 enum RoomSize { small, medium, large }

@@ -51,7 +51,7 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                           }),
                           min: 0,
                           max: 4,
-                          divisions: widget.room.type == RoomType.lab ? 4 : 1,
+                          divisions: widget.room.getNumberOfPopularityIntervals(),
                         )),
                         const Text(
                           "Full",
