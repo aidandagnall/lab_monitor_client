@@ -7,6 +7,7 @@ import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
+import 'package:lab_availability_checker/views/today_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,7 +96,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget?> states = [
-    Container(),
+    const TodayView(),
     const NowView(),
     const SettingsView(),
   ];
