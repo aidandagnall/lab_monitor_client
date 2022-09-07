@@ -5,8 +5,6 @@ import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/views/expandable_room_card.dart';
 import 'package:lab_availability_checker/views/pod_room_card.dart';
-import 'package:lab_availability_checker/views/large_room_card.dart';
-import 'package:lab_availability_checker/views/small_room_card.dart';
 
 class NowView extends StatefulWidget {
   const NowView({Key? key}) : super(key: key);
@@ -16,7 +14,6 @@ class NowView extends StatefulWidget {
 }
 
 class _NowViewState extends State<NowView> {
-  GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
   late Future<void> _roomList;
   List<Room>? _rooms;
   @override
@@ -35,7 +32,7 @@ class _NowViewState extends State<NowView> {
     setState(() {
       _rooms = r;
     });
-    return Future.delayed(Duration(seconds: 0));
+    return Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override
@@ -104,7 +101,6 @@ class _NowViewState extends State<NowView> {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RefreshIndicator(
-                  key: _refreshIndicatorKey,
                   onRefresh: () => _refreshRooms(),
                   edgeOffset: 100,
                   child: AnimationLimiter(

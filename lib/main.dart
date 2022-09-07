@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lab_availability_checker/color_schemes.g.dart';
-import 'package:lab_availability_checker/theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:lab_availability_checker/models/module_code.dart';
+import 'package:lab_availability_checker/util/module_code_provider.dart';
+import 'package:lab_availability_checker/util/theme_provider.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // transparent status bar
@@ -17,7 +20,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final lightTheme = ThemeData(
@@ -41,17 +43,16 @@ class MyApp extends StatelessWidget {
                       create: (_) => ThemeProvider.initial(
                           (snapshot.data!.getBool('settings/dark-mode') ?? false)
                               ? ThemeMode.dark
-                              : ThemeMode.light))
+                              : ThemeMode.light)),
+                  ChangeNotifierProvider(
+                    create: (_) => ModuleCodeStyleProvider.initial(ModuleCodeStyle
+                        .values[snapshot.data!.getInt('settings/module-code-style') ?? 0]),
+                  )
                 ],
                 child: Consumer<ThemeProvider>(
-                    child: const MyHomePage(title: 'Flutter Demo Home Page'),
+                    child: const MyHomePage(),
                     builder: (c, themeProvider, child) {
                       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                          // statusBarColor: Theme.of(context).colorScheme.surface,
-                          // statusBarColor: themeProvider.selectedMode == ThemeMode.light
-                          //     ? lightTheme.colorScheme.surface
-                          //     : darkTheme.colorScheme.surface, // transparent status bar
-                          // statusBarIconBrightness: ,
                           statusBarColor: Colors.transparent, // transparent status bar
                           statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
                               ? Brightness.light
@@ -82,18 +83,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -110,13 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      // appBar: AppBar(
-      //   toolbarHeight: 0,
-      //   systemOverlayStyle: SystemUiOverlayStyle.dark,
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      // ),
-      // body: SafeArea(top: false, child: NowView())
       body: SafeArea(top: false, child: states[currentPage]!),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() {

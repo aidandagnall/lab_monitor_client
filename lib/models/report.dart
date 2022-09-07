@@ -1,5 +1,5 @@
-import 'package:lab_availability_checker/models/lab.dart';
-import 'package:lab_availability_checker/models/room.dart';
+import 'package:lab_availability_checker/models/popularity.dart';
+import 'package:lab_availability_checker/models/removal_chance.dart';
 
 class Report {
   final String room;

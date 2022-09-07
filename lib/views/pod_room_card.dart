@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/models/room.dart';
-import 'package:lab_availability_checker/views/lab_bubble.dart';
-import 'package:lab_availability_checker/views/room_card.dart';
+import 'package:lab_availability_checker/views/room_report_bottom_sheet.dart';
 import 'package:lab_availability_checker/views/status_indicator.dart';
 
 class PodRoomCard extends StatelessWidget {
@@ -17,8 +16,13 @@ class PodRoomCard extends StatelessWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        child: RoomCard(
-            room: room,
+        child: InkWell(
+            onLongPress: () => showModalBottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                context: context,
+                builder: (ctx) => RoomReportBottomSheet(room: room)),
             child: SizedBox(
               height: 40,
               child: Padding(

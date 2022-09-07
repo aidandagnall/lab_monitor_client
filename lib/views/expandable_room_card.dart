@@ -19,14 +19,12 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
   @override
   Widget build(BuildContext context) {
     return Card(
-        // semanticContainer: true,
         margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         // elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        // color: Theme.of(context).colorScheme.surfaceVariant,
         child: AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.ease,
@@ -135,7 +133,6 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    // if (room.currentLab != null)
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
@@ -148,8 +145,6 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                             : LabBubble(lab: widget.room.currentLab)
                                       ],
                                     ),
-
-                                    // if (room.currentLab == null && room.nextLab != null)
                                     Column(
                                       children: [
                                         const Text("Next"),

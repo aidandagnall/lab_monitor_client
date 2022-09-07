@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/models/lab.dart';
+import 'package:lab_availability_checker/util/module_code_provider.dart';
+import 'package:provider/provider.dart';
 
 class LabBubble extends StatelessWidget {
   const LabBubble({Key? key, required this.lab}) : super(key: key);
@@ -24,11 +26,13 @@ class LabBubble extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  lab!.module.code,
-                  style: GoogleFonts.openSans(
-                      color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
-                ),
+                Consumer<ModuleCodeStyleProvider>(
+                    builder: (ctx, provider, child) => Text(
+                          lab!.module.getModuleCodeWithStyle(provider.style),
+                          style: GoogleFonts.openSans(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.w700),
+                        )),
                 Text(
                   lab!.getStartTime() + " - " + lab!.getEndTime(),
                   style: GoogleFonts.openSans(
