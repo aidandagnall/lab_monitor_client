@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
@@ -6,6 +8,7 @@ import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -104,15 +107,27 @@ class _SettingsViewState extends State<SettingsView> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
-                  children: const [
-                    Center(child: Text("Created by Aidan Dagnall")),
-                    SizedBox(
+                  children: [
+                    const Center(child: Text("Created by Aidan Dagnall")),
+                    const SizedBox(
                       height: 10,
                     ),
-                    Center(
+                    const Center(
                         child: Text(
                             "Thanks to Ben Flynn and Joe Sieniawski for their contributions in creating designs for this app",
                             textAlign: TextAlign.center)),
+                    const SizedBox(
+                      height: 60,
+                    ),
+                    const Center(
+                        child: Text("Have a suggestion or want to help out?",
+                            textAlign: TextAlign.center)),
+                    Center(
+                      child: TextButton(
+                          onPressed: () async => await launchUrl(
+                              Uri.parse("https://github.com/aidandagnall/lab_monitor_client")),
+                          child: const Text("Get Involved")),
+                    )
                   ],
                 ))
           ],
