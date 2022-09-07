@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
+import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart';
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
@@ -52,7 +53,10 @@ class MyApp extends StatelessWidget {
                   ),
                   ChangeNotifierProvider(
                       create: (_) => ExpandedCardProvider.initial(
-                          snapshot.data!.getBool('settings/expanded-cards') ?? false))
+                          snapshot.data!.getBool('settings/expanded-cards') ?? false)),
+                  ChangeNotifierProvider(
+                      create: (_) => EnableTooltipProvider.initial(
+                          snapshot.data!.getBool('settings/enabled-tooltips') ?? false)),
                 ],
                 child: Consumer<ThemeProvider>(
                     child: const MyHomePage(),

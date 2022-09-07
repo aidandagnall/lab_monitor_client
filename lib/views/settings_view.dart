@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
+import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart';
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
@@ -91,6 +92,19 @@ class _SettingsViewState extends State<SettingsView> {
                       builder: (ctx, provider, child) => Switch(
                           value: provider.expanded,
                           onChanged: (value) => provider.setExpanded(value)))
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Enable Module Tooltips"),
+                  Consumer<EnableTooltipProvider>(
+                      builder: (ctx, provider, child) => Switch(
+                          value: provider.enabled,
+                          onChanged: (value) => provider.setEnabled(value)))
                 ],
               ),
             ),

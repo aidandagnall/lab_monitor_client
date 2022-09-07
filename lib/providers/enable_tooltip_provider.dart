@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ExpandedCardProvider extends ChangeNotifier {
-  bool expanded = false;
+class EnableTooltipProvider extends ChangeNotifier {
+  bool enabled = true;
   SharedPreferences? _prefs;
 
-  ExpandedCardProvider() {
+  EnableTooltipProvider() {
     getThemeFromSP();
   }
 
-  ExpandedCardProvider.initial(bool _expanded) {
-    expanded = _expanded;
+  EnableTooltipProvider.initial(bool _enabled) {
+    enabled = _enabled;
   }
 
   _initPrefs() async {
     _prefs ??= await SharedPreferences.getInstance();
   }
 
-  setExpanded(bool _expanded) async {
-    expanded = _expanded;
-    _updateSharedPrefs(expanded);
+  setEnabled(bool _enabled) async {
+    enabled = _enabled;
+    _updateSharedPrefs(enabled);
     notifyListeners();
   }
 
   void _updateSharedPrefs(bool value) async {
     await _initPrefs();
-    _prefs!.setBool("settings/expanded-cards", value);
+    _prefs!.setBool("settings/enabled-tooltips", value);
   }
 
   getThemeFromSP() async {
     await _initPrefs();
-    expanded = _prefs!.getBool("settings/expanded-cards") ?? false;
+    enabled = _prefs!.getBool("settings/enabled-tooltips") ?? false;
   }
 }

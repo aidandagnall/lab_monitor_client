@@ -116,21 +116,33 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                                                         ),
                                                       )))))),
                                 if (widget.room.currentLab != null)
-                                  AnimatedOpacity(
-                                      curve: Curves.ease,
-                                      opacity: _selected ? 0 : 1,
+                                  AnimatedSwitcher(
+                                      // curve: Curves.ease,
+                                      // opacity: _selected ? 0 : 1,
+                                      switchInCurve: Curves.ease,
+                                      switchOutCurve: Curves.ease,
                                       duration: const Duration(milliseconds: 300),
-                                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                                        Center(child: LabBubble(lab: widget.room.currentLab))
-                                      ])),
+                                      child: !_selected
+                                          ? Row(mainAxisSize: MainAxisSize.min, children: [
+                                              Center(child: LabBubble(lab: widget.room.currentLab))
+                                            ])
+                                          : const SizedBox(
+                                              height: 66,
+                                            )),
                                 if (widget.room.currentLab == null && widget.room.nextLab != null)
-                                  AnimatedOpacity(
-                                      curve: Curves.ease,
-                                      opacity: _selected ? 0 : 1,
+                                  AnimatedSwitcher(
+                                      // curve: Curves.ease,
+                                      // opacity: _selected ? 0 : 1,
+                                      switchInCurve: Curves.ease,
+                                      switchOutCurve: Curves.ease,
                                       duration: const Duration(milliseconds: 300),
-                                      child: Row(children: [
-                                        Center(child: LabBubble(lab: widget.room.nextLab))
-                                      ])),
+                                      child: !_selected
+                                          ? Row(children: [
+                                              Center(child: LabBubble(lab: widget.room.nextLab))
+                                            ])
+                                          : const SizedBox(
+                                              height: 66,
+                                            )),
                               ])
                         ])),
                     AnimatedSize(
