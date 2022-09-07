@@ -63,13 +63,6 @@ class _SettingsViewState extends State<SettingsView> {
                         builder: (ctx, provider, child) => IntrinsicWidth(
                                 child: DropdownButtonHideUnderline(
                                     child: DropdownButton<ModuleCodeStyle>(
-                              // decoration: const InputDecoration(
-                              //   border: OutlineInputBorder(),
-                              //   focusedBorder: OutlineInputBorder(
-                              //       borderSide: BorderSide(color: Colors.grey, width: 1.0)),
-                              //   enabledBorder: OutlineInputBorder(
-                              //       borderSide: BorderSide(color: Colors.grey, width: 1.0)),
-                              // ),
                               itemHeight: 50,
                               value: provider.style,
                               items: ModuleCodeStyle.values
