@@ -6,6 +6,8 @@
 
 A Flutter project built show the status of UoN's Computer Science labs.
 
+For the server, see [here](https://github.com/aidandagnall/lab-monitor-server).
+
 ## Why?
 
 Since I started at UoN, each year's intake has grown. This means labs are more full, and module convenors are often
