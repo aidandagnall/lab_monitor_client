@@ -8,7 +8,7 @@ import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
-import 'package:lab_availability_checker/views/today_view.dart';
+import 'package:lab_availability_checker/views/issue_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,7 +100,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget?> states = [
-    const TodayView(),
+    const IssueView(),
     const NowView(),
     const SettingsView(),
   ];
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(top: false, child: states[currentPage]!),
+      body: SafeArea(top: currentPage == 1 ? false : true, child: states[currentPage]!),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() {
           currentPage = value;
@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: currentPage,
         backgroundColor: Theme.of(context).colorScheme.background,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.view_agenda), label: "Today"),
+          BottomNavigationBarItem(icon: Icon(Icons.assignment_late_outlined), label: "Issues"),
           BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
         ],
