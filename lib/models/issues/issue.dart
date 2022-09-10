@@ -50,8 +50,8 @@ class Issue {
         "location": location,
         "email": email,
         "category": category.name,
-        "subcategory": subCategory?.name,
-        "subsubcategory": subSubCategory?.name,
+        "subCategory": subCategory?.name,
+        "subSubCategory": subSubCategory?.name,
         "description": description
       };
 }

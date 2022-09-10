@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/issue_api.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
+import 'package:lab_availability_checker/views/issue_submission_dialog.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class IssueView extends StatefulWidget {
@@ -220,85 +221,16 @@ class _IssueViewState extends State<IssueView> {
                       if (_formKey.currentState!.validate()) {
                         showDialog(
                             context: context,
-                            builder: ((context) => Center(
-                                child: FractionallySizedBox(
-                                    widthFactor: 0.8,
-                                    child: Card(
-                                        child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: AnimatedSize(
-                                                duration: const Duration(milliseconds: 200),
-                                                curve: Curves.ease,
-                                                child: FutureBuilder(
-                                                    future: submitReport(Issue(
-                                                        location: locationIdController.text
-                                                                .substring(0, 2) +
-                                                            "-" +
-                                                            locationIdController.text.substring(3),
-                                                        email: "TODO",
-                                                        category: category!,
-                                                        subCategory: subCategory,
-                                                        subSubCategory: subSubCategory,
-                                                        description: descriptionController.text)),
-                                                    builder: (ctx, snapshot) => snapshot.hasData
-                                                        ? Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Padding(
-                                                                  padding: const EdgeInsets.only(
-                                                                      bottom: 10),
-                                                                  child: Text(
-                                                                    "Issue Submitted",
-                                                                    textAlign: TextAlign.center,
-                                                                    style: GoogleFonts.openSans(
-                                                                        fontSize: 20),
-                                                                  )),
-                                                              Padding(
-                                                                  padding:
-                                                                      const EdgeInsets.symmetric(
-                                                                          vertical: 10),
-                                                                  child: Text(
-                                                                    "You will receive an email once it has been received and then resolved.",
-                                                                    textAlign: TextAlign.center,
-                                                                    style: GoogleFonts.openSans(
-                                                                        fontSize: 16),
-                                                                  )),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets.only(top: 10),
-                                                                child: ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                      elevation: 4,
-                                                                      shape:
-                                                                          const RoundedRectangleBorder(
-                                                                              borderRadius:
-                                                                                  BorderRadius.all(
-                                                                                      Radius
-                                                                                          .circular(
-                                                                                              5))),
-                                                                      primary: Theme.of(context)
-                                                                          .colorScheme
-                                                                          .primary,
-                                                                      onPrimary: Theme.of(context)
-                                                                          .colorScheme
-                                                                          .onPrimary,
-                                                                    ),
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(context),
-                                                                    child: const Padding(
-                                                                        padding:
-                                                                            EdgeInsets.symmetric(
-                                                                                horizontal: 20),
-                                                                        child: Text("OK"))),
-                                                              )
-                                                            ],
-                                                          )
-                                                        : const IntrinsicHeight(
-                                                            child: Center(
-                                                                child: Padding(
-                                                                    padding: EdgeInsets.all(20),
-                                                                    child:
-                                                                        CircularProgressIndicator())))))))))));
+                            builder: ((context) => IssueSubmissionDialog(
+                                issue: Issue(
+                                    location: locationIdController.text.substring(0, 3) +
+                                        "-" +
+                                        locationIdController.text.substring(3),
+                                    email: "TODO",
+                                    category: category!,
+                                    subCategory: subCategory,
+                                    subSubCategory: subSubCategory,
+                                    description: descriptionController.text))));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -333,11 +265,5 @@ class _IssueViewState extends State<IssueView> {
       return "";
     }
     return code.replaceAll("-", "");
-  }
-
-  Future<bool> submitReport(Issue issue) async {
-    IssueApi().submitReport(issue);
-    await Future.delayed(const Duration(seconds: 1));
-    return true;
   }
 }
