@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lab_availability_checker/api/issue_api.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
 import 'package:lab_availability_checker/views/issue_submission_dialog.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
