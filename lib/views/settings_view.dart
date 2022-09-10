@@ -35,7 +35,8 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
-        child: Column(
+        child: SingleChildScrollView(
+            child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
@@ -143,6 +144,6 @@ class _SettingsViewState extends State<SettingsView> {
                   ],
                 ))
           ],
-        ));
+        )));
   }
 }
