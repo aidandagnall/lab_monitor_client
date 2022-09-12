@@ -25,7 +25,8 @@ class _IssueViewState extends State<IssueView> {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Form(
             key: _formKey,
-            child: Column(
+            child: SingleChildScrollView(
+                child: Column(
               children: [
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -50,6 +51,7 @@ class _IssueViewState extends State<IssueView> {
                             child: Padding(
                                 padding: const EdgeInsets.only(right: 20),
                                 child: TextFormField(
+                                  initialValue: null,
                                   controller: locationIdController,
                                   style: GoogleFonts.openSans(fontSize: 16),
                                   cursorHeight: 20,
@@ -215,9 +217,10 @@ class _IssueViewState extends State<IssueView> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
                       if (_formKey.currentState!.validate()) {
-                        showDialog(
+                        final bool? clearForm = await showDialog<bool>(
                             context: context,
                             builder: ((context) => IssueSubmissionDialog(
                                 issue: Issue(
@@ -229,6 +232,16 @@ class _IssueViewState extends State<IssueView> {
                                     subCategory: subCategory,
                                     subSubCategory: subSubCategory,
                                     description: descriptionController.text))));
+                        if (clearForm == true) {
+                          setState(() {
+                            _formKey.currentState!.reset();
+                            locationIdController.value = TextEditingValue.empty;
+                            descriptionController.value = TextEditingValue.empty;
+                            category = null;
+                            subCategory = null;
+                            subSubCategory = null;
+                          });
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -243,7 +256,7 @@ class _IssueViewState extends State<IssueView> {
                   ),
                 )
               ],
-            )));
+            ))));
   }
 
   Future<String?> openScanner(BuildContext context) async {
