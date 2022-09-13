@@ -6,6 +6,7 @@ import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart'
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
+import 'package:lab_availability_checker/providers/token_provider.dart';
 import 'package:lab_availability_checker/views/login_page.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
@@ -58,11 +59,13 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => EnableTooltipProvider.initial(
                           snapshot.data!.getBool('settings/enabled-tooltips') ?? false)),
+                  ChangeNotifierProvider(create: (_) => TokenProvider())
                 ],
                 child: Consumer<ThemeProvider>(
-                    child: snapshot.data!.getString("authentication-key") == null
-                        ? const LoginPage()
-                        : const MyHomePage(),
+                    child: Consumer<TokenProvider>(
+                      builder: (context, provider, child) =>
+                          provider.token == null ? const LoginPage() : const MyHomePage(),
+                    ),
                     builder: (c, themeProvider, child) {
                       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                           statusBarColor: Colors.transparent, // transparent status bar
