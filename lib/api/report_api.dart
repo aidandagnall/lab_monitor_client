@@ -8,7 +8,10 @@ class ReportApi {
 
   Future<void> submitReport(Report report) async {
     await client.post(Uri.http(Constants.API_URL, 'report'),
-        headers: {"Accept": "application/json", "content-type": "application/json"},
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
         body: jsonEncode(report));
   }
 }

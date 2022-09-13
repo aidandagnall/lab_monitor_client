@@ -29,18 +29,22 @@ class Room {
     t = Room(
         name: json['name'],
         reportCount: json['reportCount'],
-        currentLab: json['currentLab'] != null ? Lab.fromJson(json['currentLab']) : null,
+        currentLab: json['currentLab'] != null
+            ? Lab.fromJson(json['currentLab'])
+            : null,
         nextLab: json['nextLab'] != null ? Lab.fromJson(json['nextLab']) : null,
-        size: RoomSize.values.firstWhere((e) => e.toString() == "RoomSize." + json['size']),
-        type: RoomType.values.firstWhere((e) => e.toString() == "RoomType." + json['type']),
+        size: RoomSize.values
+            .firstWhere((e) => e.toString() == "RoomSize." + json['size']),
+        type: RoomType.values
+            .firstWhere((e) => e.toString() == "RoomType." + json['type']),
         popularity: json['popularity'] == null
             ? null
-            : Popularity.values
-                .firstWhere((e) => e.toString() == "Popularity." + json['popularity']),
+            : Popularity.values.firstWhere(
+                (e) => e.toString() == "Popularity." + json['popularity']),
         removalChance: json['removalChance'] == null
             ? null
-            : RemovalChance.values
-                .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']));
+            : RemovalChance.values.singleWhere((e) =>
+                e.toString() == "RemovalChance." + json['removalChance']));
     return t;
   }
 
@@ -53,10 +57,12 @@ class Room {
       return "In use";
     }
 
-    if (popularity == Popularity.very_busy || removalChance == RemovalChance.definite) {
+    if (popularity == Popularity.veryBusy ||
+        removalChance == RemovalChance.definite) {
       return "Very busy";
     }
-    if ((popularity?.index ?? Popularity.empty.index) >= Popularity.busy.index ||
+    if ((popularity?.index ?? Popularity.empty.index) >=
+            Popularity.busy.index ||
         removalChance == RemovalChance.high) {
       return "Busy";
     }
@@ -69,10 +75,12 @@ class Room {
   }
 
   Color getStatusColour() {
-    if (popularity == Popularity.very_busy || removalChance == RemovalChance.definite) {
+    if (popularity == Popularity.veryBusy ||
+        removalChance == RemovalChance.definite) {
       return const Color(0xFF9D0000);
     }
-    if ((popularity?.index ?? Popularity.empty.index) >= Popularity.busy.index ||
+    if ((popularity?.index ?? Popularity.empty.index) >=
+            Popularity.busy.index ||
         removalChance == RemovalChance.high) {
       return Colors.red;
     }

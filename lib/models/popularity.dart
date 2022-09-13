@@ -1,4 +1,4 @@
-enum Popularity { empty, quiet, medium, busy, very_busy }
+enum Popularity { empty, quiet, medium, busy, veryBusy }
 
 extension PopularityString on Popularity {
   Popularity? toEnum(String value) {
@@ -12,7 +12,7 @@ extension PopularityString on Popularity {
       case "busy":
         return Popularity.busy;
       case "very_busy":
-        return Popularity.very_busy;
+        return Popularity.veryBusy;
       default:
         return null;
     }

@@ -32,13 +32,15 @@ class _IssueViewState extends State<IssueView> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(
                       "Submit a Lab Issue",
-                      style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w300),
+                      style: GoogleFonts.openSans(
+                          fontSize: 30, fontWeight: FontWeight.w300),
                     )),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
                       "Scan or manually enter a location",
-                      style: GoogleFonts.openSans(fontSize: 16, fontWeight: FontWeight.w400),
+                      style: GoogleFonts.openSans(
+                          fontSize: 16, fontWeight: FontWeight.w400),
                     )),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -59,7 +61,8 @@ class _IssueViewState extends State<IssueView> {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter a Location ID";
                                     }
-                                    if (RegExp(r'^[0-2][0-9]{5,5}$').hasMatch(value)) {
+                                    if (RegExp(r'^[0-2][0-9]{5,5}$')
+                                        .hasMatch(value)) {
                                       return null;
                                     }
                                     return "Please enter a valid Location ID";
@@ -67,22 +70,26 @@ class _IssueViewState extends State<IssueView> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: "Location ID",
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
                                   ),
                                 ))),
                         ElevatedButton(
-                            onPressed: () async =>
-                                locationIdController.text = (await openScanner(context))!,
+                            onPressed: () async => locationIdController.text =
+                                (await openScanner(context))!,
                             style: ElevatedButton.styleFrom(
                               elevation: 4,
                               shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(5))),
-                              primary: Theme.of(context).colorScheme.primary,
-                              onPrimary: Theme.of(context).colorScheme.onPrimary,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onPrimary,
                             ),
                             child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
                                 child: Icon(
                                   Icons.qr_code_scanner_rounded,
                                   size: 28,
@@ -96,7 +103,8 @@ class _IssueViewState extends State<IssueView> {
                           border: const OutlineInputBorder(),
                           labelStyle: GoogleFonts.openSans(fontSize: 16),
                           alignLabelWithHint: true,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                           labelText: "Category",
                         ),
                         validator: ((value) {
@@ -128,8 +136,8 @@ class _IssueViewState extends State<IssueView> {
                             border: const OutlineInputBorder(),
                             labelStyle: GoogleFonts.openSans(fontSize: 16),
                             alignLabelWithHint: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
                             labelText: "Sub-Category",
                           ),
                           value: subCategory,
@@ -155,7 +163,8 @@ class _IssueViewState extends State<IssueView> {
                               subSubCategory = null;
                             });
                           })),
-                if (category?.subIssues != null && subCategory?.subIssues != null)
+                if (category?.subIssues != null &&
+                    subCategory?.subIssues != null)
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: DropdownButtonFormField<IssueSubSubCategory>(
@@ -163,8 +172,8 @@ class _IssueViewState extends State<IssueView> {
                             border: const OutlineInputBorder(),
                             labelStyle: GoogleFonts.openSans(fontSize: 16),
                             alignLabelWithHint: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
                             labelText: "Select your Issue",
                           ),
                           value: subSubCategory,
@@ -185,7 +194,8 @@ class _IssueViewState extends State<IssueView> {
                                   ))
                               .toList(),
                           onChanged: (IssueSubSubCategory? _subSubCategory) =>
-                              setState(() => subSubCategory = _subSubCategory!))),
+                              setState(
+                                  () => subSubCategory = _subSubCategory!))),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
@@ -205,7 +215,8 @@ class _IssueViewState extends State<IssueView> {
                           border: const OutlineInputBorder(),
                           labelStyle: GoogleFonts.openSans(fontSize: 16),
                           alignLabelWithHint: true,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                           labelText: category?.descriptionRequired == true ||
                                   subCategory?.descriptionRequired == true ||
                                   subSubCategory?.descriptionRequired == true
@@ -224,7 +235,8 @@ class _IssueViewState extends State<IssueView> {
                             context: context,
                             builder: ((context) => IssueSubmissionDialog(
                                 issue: Issue(
-                                    location: locationIdController.text.substring(0, 3) +
+                                    location: locationIdController.text
+                                            .substring(0, 3) +
                                         "-" +
                                         locationIdController.text.substring(3),
                                     email: "TODO",
@@ -236,7 +248,8 @@ class _IssueViewState extends State<IssueView> {
                           setState(() {
                             _formKey.currentState!.reset();
                             locationIdController.value = TextEditingValue.empty;
-                            descriptionController.value = TextEditingValue.empty;
+                            descriptionController.value =
+                                TextEditingValue.empty;
                             category = null;
                             subCategory = null;
                             subSubCategory = null;
@@ -248,11 +261,12 @@ class _IssueViewState extends State<IssueView> {
                       elevation: 4,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
-                      primary: Theme.of(context).colorScheme.primary,
-                      onPrimary: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20), child: Text("Submit Issue")),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text("Submit Issue")),
                   ),
                 )
               ],
@@ -267,7 +281,8 @@ class _IssueViewState extends State<IssueView> {
                 appBar: AppBar(title: const Text("Scan a location tag")),
                 body: MobileScanner(
                   allowDuplicates: false,
-                  onDetect: (barcode, args) => Navigator.pop(context, barcode.rawValue),
+                  onDetect: (barcode, args) =>
+                      Navigator.pop(context, barcode.rawValue),
                 ))));
     if (code == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

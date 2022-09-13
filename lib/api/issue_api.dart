@@ -8,7 +8,10 @@ class IssueApi {
 
   Future<bool> submitReport(Issue issue) async {
     final response = await client.post(Uri.http(Constants.API_URL, 'issue'),
-        headers: {"Accept": "application/json", "content-type": "application/json"},
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
         body: jsonEncode(issue));
     if (response.statusCode == 201) {
       return true;
