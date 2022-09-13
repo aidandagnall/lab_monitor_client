@@ -5,6 +5,7 @@ import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart'
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
+import 'package:lab_availability_checker/providers/token_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -142,7 +143,21 @@ class _SettingsViewState extends State<SettingsView> {
                           child: const Text("Get Involved")),
                     )
                   ],
-                ))
+                )),
+            Center(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Consumer<TokenProvider>(
+                      builder: (context, provider, child) => TextButton(
+                          onPressed: () async {
+                            final success = await provider.logout();
+                            if (!success) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("Failed to logout. Try again later.")));
+                            }
+                          },
+                          child: const Text("Logout")),
+                    )))
           ],
         )));
   }
