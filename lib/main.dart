@@ -62,34 +62,33 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(create: (_) => TokenProvider())
                 ],
                 child: Consumer<ThemeProvider>(
-                    child: Consumer<TokenProvider>(
-                      builder: (context, provider, child) =>
-                          provider.token == null ? const LoginPage() : const MyHomePage(),
-                    ),
-                    builder: (c, themeProvider, child) {
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                          statusBarColor: Colors.transparent, // transparent status bar
-                          statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
-                              ? Brightness.light
-                              : Brightness.dark,
-                          statusBarIconBrightness: themeProvider.selectedMode == ThemeMode.light
+                    child: Consumer<TokenProvider>(builder: (context, provider, child) {
+                  provider.getThemeFromStorage();
+                  return provider.token == null ? const LoginPage() : const MyHomePage();
+                }), builder: (c, themeProvider, child) {
+                  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                      statusBarColor: Colors.transparent, // transparent status bar
+                      statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
+                          ? Brightness.light
+                          : Brightness.dark,
+                      statusBarIconBrightness: themeProvider.selectedMode == ThemeMode.light
+                          ? Brightness.dark
+                          : Brightness.light,
+                      systemNavigationBarColor: themeProvider.selectedMode == ThemeMode.light
+                          ? lightTheme.colorScheme.surface
+                          : darkTheme.colorScheme.surface,
+                      systemNavigationBarIconBrightness:
+                          themeProvider.selectedMode == ThemeMode.light
                               ? Brightness.dark
-                              : Brightness.light,
-                          systemNavigationBarColor: themeProvider.selectedMode == ThemeMode.light
-                              ? lightTheme.colorScheme.surface
-                              : darkTheme.colorScheme.surface,
-                          systemNavigationBarIconBrightness:
-                              themeProvider.selectedMode == ThemeMode.light
-                                  ? Brightness.dark
-                                  : Brightness.light));
-                      return MaterialApp(
-                          debugShowCheckedModeBanner: false,
-                          title: 'UoN Lab Monitor',
-                          theme: lightTheme,
-                          darkTheme: darkTheme,
-                          themeMode: themeProvider.selectedMode,
-                          home: child);
-                    }));
+                              : Brightness.light));
+                  return MaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      title: 'UoN Lab Monitor',
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      themeMode: themeProvider.selectedMode,
+                      home: child);
+                }));
           }
           return const MaterialApp(
               home: Scaffold(body: Center(child: CircularProgressIndicator())));
