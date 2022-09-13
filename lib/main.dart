@@ -62,33 +62,41 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(create: (_) => TokenProvider())
                 ],
                 child: Consumer<ThemeProvider>(
-                    child: Consumer<TokenProvider>(builder: (context, provider, child) {
-                  provider.getThemeFromStorage();
-                  return provider.token == null ? const LoginPage() : const MyHomePage();
-                }), builder: (c, themeProvider, child) {
-                  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                      statusBarColor: Colors.transparent, // transparent status bar
-                      statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
-                          ? Brightness.light
-                          : Brightness.dark,
-                      statusBarIconBrightness: themeProvider.selectedMode == ThemeMode.light
-                          ? Brightness.dark
-                          : Brightness.light,
-                      systemNavigationBarColor: themeProvider.selectedMode == ThemeMode.light
-                          ? lightTheme.colorScheme.surface
-                          : darkTheme.colorScheme.surface,
-                      systemNavigationBarIconBrightness:
-                          themeProvider.selectedMode == ThemeMode.light
+                    child: Consumer<TokenProvider>(
+                        builder: (context, provider, child) => FutureBuilder<String>(
+                            future: provider.getThemeFromStorage(),
+                            builder: ((context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              return provider.token == null
+                                  ? const LoginPage()
+                                  : const MyHomePage();
+                            }))),
+                    builder: (c, themeProvider, child) {
+                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                          statusBarColor: Colors.transparent, // transparent status bar
+                          statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
+                              ? Brightness.light
+                              : Brightness.dark,
+                          statusBarIconBrightness: themeProvider.selectedMode == ThemeMode.light
                               ? Brightness.dark
-                              : Brightness.light));
-                  return MaterialApp(
-                      debugShowCheckedModeBanner: false,
-                      title: 'UoN Lab Monitor',
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      themeMode: themeProvider.selectedMode,
-                      home: child);
-                }));
+                              : Brightness.light,
+                          systemNavigationBarColor: themeProvider.selectedMode == ThemeMode.light
+                              ? lightTheme.colorScheme.surface
+                              : darkTheme.colorScheme.surface,
+                          systemNavigationBarIconBrightness:
+                              themeProvider.selectedMode == ThemeMode.light
+                                  ? Brightness.dark
+                                  : Brightness.light));
+                      return MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          title: 'UoN Lab Monitor',
+                          theme: lightTheme,
+                          darkTheme: darkTheme,
+                          themeMode: themeProvider.selectedMode,
+                          home: child);
+                    }));
           }
           return const MaterialApp(
               home: Scaffold(body: Center(child: CircularProgressIndicator())));
@@ -106,7 +114,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget?> states = [
     const IssueView(),
-    const NowView(),
+    Consumer<TokenProvider>(
+        builder: (context, provider, child) => NowView(
+              token: provider.token!,
+            )),
     const SettingsView(),
   ];
   int currentPage = 1;
