@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 import '../providers/expanded_card_provider.dart';
 
 class NowView extends StatefulWidget {
-  const NowView({Key? key}) : super(key: key);
+  const NowView({Key? key, required this.token}) : super(key: key);
+  final String token;
 
   @override
   createState() => _NowViewState();
@@ -22,15 +23,16 @@ class _NowViewState extends State<NowView> {
   @override
   void initState() {
     super.initState();
+    _roomList = _getRooms();
   }
 
-  Future<void> _getRooms(String token) async {
-    final r = await RoomApi().getRooms(token);
+  Future<void> _getRooms() async {
+    final r = await RoomApi().getRooms(widget.token);
     _rooms = r;
   }
 
-  Future<void> _refreshRooms(String token) async {
-    final r = await RoomApi().getRooms(token);
+  Future<void> _refreshRooms() async {
+    final r = await RoomApi().getRooms(widget.token);
     setState(() {
       _rooms = r;
     });
@@ -39,101 +41,98 @@ class _NowViewState extends State<NowView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TokenProvider>(builder: (context, provider, child) {
-      _roomList = _getRooms(provider.token!);
-      return FutureBuilder(
-          future: _roomList,
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (_rooms == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            _rooms = _rooms!
-              ..sort((a, b) {
-                if (a.name == "A32") {
-                  return -1;
-                }
-                if (b.name == "A32") {
-                  return 1;
-                }
-                return a.name.compareTo(b.name);
-              });
-            final _labs = _rooms!.where((e) => e.type == RoomType.lab).toList();
-            final _pods = _rooms!.where((e) => e.type == RoomType.pod).toList();
-            final _podRows = [
-              Padding(
-                  padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-                    Text("Pods"),
-                    Divider(
-                      color: Colors.black,
-                    )
-                  ])),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: PodRoomCard(room: _pods[0]),
-                  )),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: PodRoomCard(room: _pods[1]),
-                  )),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: PodRoomCard(room: _pods[2]),
-                  )),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: PodRoomCard(room: _pods[3]),
-                  )),
-                ],
-              ),
-            ];
-            return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: RefreshIndicator(
-                    onRefresh: () => _refreshRooms(provider.token!),
-                    edgeOffset: 100,
-                    child: AnimationLimiter(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _labs.length + _podRows.length,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final Widget child;
-                          if (index >= _labs.length) {
-                            child = _podRows[index - _labs.length];
-                          } else {
-                            child = Consumer<ExpandedCardProvider>(
-                                builder: (ctx, provider, value) => ExpandableRoomCard(
-                                      room: _labs[index],
-                                      expanded: provider.expanded,
-                                    ));
-                          }
-                          return Padding(
-                              padding: EdgeInsets.only(top: index == 0 ? 40 : 0),
-                              child: AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 400),
-                                  child: SlideAnimation(
-                                      verticalOffset: 50, child: FadeInAnimation(child: child))));
-                        },
-                      ),
-                    )));
-          }));
-    });
+    return FutureBuilder(
+        future: _roomList,
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (_rooms == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          _rooms = _rooms!
+            ..sort((a, b) {
+              if (a.name == "A32") {
+                return -1;
+              }
+              if (b.name == "A32") {
+                return 1;
+              }
+              return a.name.compareTo(b.name);
+            });
+          final _labs = _rooms!.where((e) => e.type == RoomType.lab).toList();
+          final _pods = _rooms!.where((e) => e.type == RoomType.pod).toList();
+          final _podRows = [
+            Padding(
+                padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+                  Text("Pods"),
+                  Divider(
+                    color: Colors.black,
+                  )
+                ])),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: PodRoomCard(room: _pods[0]),
+                )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: PodRoomCard(room: _pods[1]),
+                )),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(right: 5),
+                  child: PodRoomCard(room: _pods[2]),
+                )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: PodRoomCard(room: _pods[3]),
+                )),
+              ],
+            ),
+          ];
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: RefreshIndicator(
+                  onRefresh: () => _refreshRooms(),
+                  edgeOffset: 100,
+                  child: AnimationLimiter(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _labs.length + _podRows.length,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final Widget child;
+                        if (index >= _labs.length) {
+                          child = _podRows[index - _labs.length];
+                        } else {
+                          child = Consumer<ExpandedCardProvider>(
+                              builder: (ctx, provider, value) => ExpandableRoomCard(
+                                    room: _labs[index],
+                                    expanded: provider.expanded,
+                                  ));
+                        }
+                        return Padding(
+                            padding: EdgeInsets.only(top: index == 0 ? 40 : 0),
+                            child: AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 400),
+                                child: SlideAnimation(
+                                    verticalOffset: 50, child: FadeInAnimation(child: child))));
+                      },
+                    ),
+                  )));
+        }));
   }
 }
