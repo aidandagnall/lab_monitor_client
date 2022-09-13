@@ -29,67 +29,72 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Center(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        "Welcome to Lab Monitor",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.openSans(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 50,
-                        ),
-                      ))),
-              if (state == LoginState.waitingForEmail)
-                _EmailInput(callback: (_email) async {
-                  setState(() {
-                    state = LoginState.waiting;
-                  });
-                  final _token = await AuthApi().submitEmail(_email);
-                  if (_token != null) {
-                    setState(() {
-                      email = _email;
-                      token = _token;
-                      state = LoginState.waitingForCode;
-                    });
-                  }
-                }),
-              if (state == LoginState.waitingForCode)
-                Consumer<TokenProvider>(
-                    builder: ((context, provider, child) => _CodeInput(
-                          callback: (code) async {
-                            setState(() {
-                              state = LoginState.waiting;
-                            });
-                            final authenticated = await AuthApi().submitCode(code, token!);
-                            if (authenticated) {
-                              await provider.setToken(token!, email!);
-                              setState(() {
-                                state = LoginState.success;
-                              });
-                            } else {
-                              setState(() {
-                                state = LoginState.waitingForCode;
-                              });
-                            }
-                          },
-                        ))),
-              if (state == LoginState.waiting)
-                const Center(
-                    child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 40),
-                        child: CircularProgressIndicator()))
-            ],
-          )),
-    )));
+      child: Center(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              "Welcome to Lab Monitor",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.openSans(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 50,
+                              ),
+                            ))),
+                    AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        child: state == LoginState.waiting
+                            ? const Center(
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 40),
+                                    child: CircularProgressIndicator()))
+                            : (state == LoginState.waitingForEmail
+                                ? _EmailInput(callback: (_email) async {
+                                    setState(() {
+                                      state = LoginState.waiting;
+                                    });
+                                    final _token = await AuthApi().submitEmail(_email);
+                                    if (_token != null) {
+                                      setState(() {
+                                        email = _email;
+                                        token = _token;
+                                        state = LoginState.waitingForCode;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        state = LoginState.waitingForEmail;
+                                      });
+                                    }
+                                  })
+                                : Consumer<TokenProvider>(
+                                    builder: ((context, provider, child) => _CodeInput(
+                                          callback: (code) async {
+                                            setState(() {
+                                              state = LoginState.waiting;
+                                            });
+                                            final authenticated =
+                                                await AuthApi().submitCode(code, token!);
+                                            if (authenticated) {
+                                              await provider.setToken(token!, email!);
+                                              setState(() {
+                                                state = LoginState.success;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                state = LoginState.waitingForCode;
+                                              });
+                                            }
+                                          },
+                                        ))))),
+                  ]))),
+    ));
   }
 }
 
