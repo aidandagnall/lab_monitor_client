@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/report_api.dart';
 import 'package:lab_availability_checker/models/popularity.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
@@ -77,7 +78,8 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Text("Disclaimer: Your email will be included with this report"),
+                    Text("Disclaimer: Your email will be included with this report",
+                        textAlign: TextAlign.center, style: GoogleFonts.openSans()),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
