@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:lab_availability_checker/views/issue_submission_dialog.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
@@ -226,7 +226,7 @@ class _IssueViewState extends State<IssueView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Consumer<TokenProvider>(
+                  child: Consumer<AuthProvider>(
                       builder: (context, provider, child) => ElevatedButton(
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
@@ -238,7 +238,7 @@ class _IssueViewState extends State<IssueView> {
                                             location: locationIdController.text.substring(0, 3) +
                                                 "-" +
                                                 locationIdController.text.substring(3),
-                                            email: provider.email!,
+                                            email: provider.credentials!.user.email!,
                                             category: category!,
                                             subCategory: subCategory,
                                             subSubCategory: subSubCategory,

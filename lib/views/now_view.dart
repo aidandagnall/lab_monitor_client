@@ -1,8 +1,9 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/room.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:lab_availability_checker/views/expandable_room_card.dart';
 import 'package:lab_availability_checker/views/pod_room_card.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class NowView extends StatefulWidget {
 class _NowViewState extends State<NowView> {
   late Future<void> _roomList;
   List<Room>? _rooms;
+  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -32,6 +34,7 @@ class _NowViewState extends State<NowView> {
   }
 
   Future<void> _refreshRooms() async {
+    _refreshKey.currentState?.show();
     final r = await RoomApi().getRooms(widget.token);
     setState(() {
       _rooms = r;
@@ -77,12 +80,18 @@ class _NowViewState extends State<NowView> {
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: PodRoomCard(room: _pods[0]),
+                  child: PodRoomCard(
+                    room: _pods[0],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: PodRoomCard(room: _pods[1]),
+                  child: PodRoomCard(
+                    room: _pods[1],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
               ],
             ),
@@ -92,12 +101,18 @@ class _NowViewState extends State<NowView> {
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: PodRoomCard(room: _pods[2]),
+                  child: PodRoomCard(
+                    room: _pods[2],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: PodRoomCard(room: _pods[3]),
+                  child: PodRoomCard(
+                    room: _pods[3],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
               ],
             ),
@@ -105,6 +120,7 @@ class _NowViewState extends State<NowView> {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RefreshIndicator(
+                  key: _refreshKey,
                   onRefresh: () => _refreshRooms(),
                   edgeOffset: 100,
                   child: AnimationLimiter(
@@ -121,6 +137,7 @@ class _NowViewState extends State<NowView> {
                               builder: (ctx, provider, value) => ExpandableRoomCard(
                                     room: _labs[index],
                                     expanded: provider.expanded,
+                                    onReportSubmission: _refreshRooms,
                                   ));
                         }
                         return Padding(

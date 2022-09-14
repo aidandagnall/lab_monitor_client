@@ -5,12 +5,14 @@ class Report {
   final String room;
   final Popularity? popularity;
   final RemovalChance? removalChance;
+  final String email;
 
-  const Report({required this.room, this.popularity, this.removalChance});
+  const Report({required this.room, required this.email, this.popularity, this.removalChance});
 
   Map<String, dynamic> toJson() => {
         'room': room,
         "popularity": popularity?.name,
         "removalChance": removalChance?.name,
+        "email": email,
       };
 }

@@ -12,7 +12,7 @@ class ReportApi {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader: "Bearer $token",
         },
         body: jsonEncode(report));
     print(response.reasonPhrase);

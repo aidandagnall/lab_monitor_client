@@ -1,9 +1,11 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/auth_api.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
+import 'package:lab_availability_checker/util/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,24 +58,12 @@ class _LoginPageState extends State<LoginPage> {
                                     padding: EdgeInsets.symmetric(vertical: 40),
                                     child: CircularProgressIndicator()))
                             : (state == LoginState.waitingForEmail
-                                ? _EmailInput(callback: (_email) async {
-                                    setState(() {
-                                      state = LoginState.waiting;
-                                    });
-                                    final _token = await AuthApi().submitEmail(_email);
-                                    if (_token != null) {
-                                      setState(() {
-                                        email = _email;
-                                        token = _token;
-                                        state = LoginState.waitingForCode;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        state = LoginState.waitingForEmail;
-                                      });
-                                    }
-                                  })
-                                : Consumer<TokenProvider>(
+                                ? Consumer<AuthProvider>(
+                                    builder: (context, provider, child) =>
+                                        _EmailInput(callback: (_email) async {
+                                          provider.login();
+                                        }))
+                                : Consumer<AuthProvider>(
                                     builder: ((context, provider, child) => _CodeInput(
                                           callback: (code) async {
                                             setState(() {
@@ -82,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                                             final authenticated =
                                                 await AuthApi().submitCode(code, token!);
                                             if (authenticated) {
-                                              await provider.setToken(token!, email!);
                                               setState(() {
                                                 state = LoginState.success;
                                               });
@@ -109,18 +98,9 @@ class _EmailInput extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              "To get started, we need to verify you. Enter your University email below.",
+              "To get started, we need to verify you. Please use your University email address!",
               style: GoogleFonts.openSans(),
               textAlign: TextAlign.center,
-            )),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
-                  hintText: "username@nottingham.ac.uk"),
             )),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -134,7 +114,7 @@ class _EmailInput extends StatelessWidget {
               onPrimary: Theme.of(context).colorScheme.onPrimary,
             ),
             child: Text(
-              "Submit",
+              "Login via auth0",
               style: GoogleFonts.openSans(),
             ),
           ),

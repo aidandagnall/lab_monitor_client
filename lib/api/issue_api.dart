@@ -12,7 +12,7 @@ class IssueApi {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader: "Bearer $token",
         },
         body: jsonEncode(issue));
     if (response.statusCode == 201) {

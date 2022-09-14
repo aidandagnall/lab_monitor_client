@@ -1,3 +1,4 @@
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,7 +7,7 @@ import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart'
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:lab_availability_checker/views/login_page.dart';
 import 'package:lab_availability_checker/views/now_view.dart';
 import 'package:lab_availability_checker/views/settings_view.dart';
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
       colorSchemeSeed: const Color(0xFF005597),
       brightness: Brightness.dark,
     );
-
     return FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -59,15 +59,16 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => EnableTooltipProvider.initial(
                           snapshot.data!.getBool('settings/enabled-tooltips') ?? false)),
-                  ChangeNotifierProvider(create: (_) => TokenProvider())
+                  ChangeNotifierProvider(create: (_) => AuthProvider())
                 ],
                 child: Consumer<ThemeProvider>(
-                    child: Consumer<TokenProvider>(builder: (context, provider, child) {
-                  if (provider.token == null) {
-                    return const Center(child: CircularProgressIndicator());
+                    child: Consumer<AuthProvider>(builder: ((context, provider, child) {
+                  if (provider.credentials != null) {
+                    return const MyHomePage();
+                  } else {
+                    return const LoginPage();
                   }
-                  return provider.token == "" ? const LoginPage() : const MyHomePage();
-                }), builder: (c, themeProvider, child) {
+                })), builder: (c, themeProvider, child) {
                   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                       statusBarColor: Colors.transparent, // transparent status bar
                       statusBarBrightness: themeProvider.selectedMode == ThemeMode.light
@@ -100,21 +101,25 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Widget?> states = [
-    const IssueView(),
-    Consumer<TokenProvider>(
-        builder: (context, provider, child) => NowView(
-              token: provider.token!,
-            )),
-    const SettingsView(),
-  ];
+  late List<Widget?> states;
   int currentPage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    states = [
+      const IssueView(),
+      Consumer<AuthProvider>(
+          builder: (_, provider, child) => NowView(token: provider.credentials!.accessToken)),
+      const SettingsView(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
