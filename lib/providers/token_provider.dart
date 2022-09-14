@@ -20,9 +20,9 @@ class TokenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getThemeFromStorage() async {
-    token = await storage.read(key: "auth-token");
-    email = await storage.read(key: "email");
+  Future<void> getThemeFromStorage() async {
+    token = await storage.read(key: "auth-token") ?? "";
+    email = await storage.read(key: "email") ?? "";
     notifyListeners();
   }
 
