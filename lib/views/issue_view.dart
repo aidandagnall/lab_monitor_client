@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
+import 'package:lab_availability_checker/providers/token_provider.dart';
 import 'package:lab_availability_checker/views/issue_submission_dialog.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 
 class IssueView extends StatefulWidget {
   const IssueView({Key? key}) : super(key: key);
@@ -215,45 +217,55 @@ class _IssueViewState extends State<IssueView> {
                         keyboardType: TextInputType.multiline,
                         maxLines: 5)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      if (_formKey.currentState!.validate()) {
-                        final bool? clearForm = await showDialog<bool>(
-                            context: context,
-                            builder: ((context) => IssueSubmissionDialog(
-                                issue: Issue(
-                                    location: locationIdController.text.substring(0, 3) +
-                                        "-" +
-                                        locationIdController.text.substring(3),
-                                    email: "TODO",
-                                    category: category!,
-                                    subCategory: subCategory,
-                                    subSubCategory: subSubCategory,
-                                    description: descriptionController.text))));
-                        if (clearForm == true) {
-                          setState(() {
-                            _formKey.currentState!.reset();
-                            locationIdController.value = TextEditingValue.empty;
-                            descriptionController.value = TextEditingValue.empty;
-                            category = null;
-                            subCategory = null;
-                            subSubCategory = null;
-                          });
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 4,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      primary: Theme.of(context).colorScheme.primary,
-                      onPrimary: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20), child: Text("Submit Issue")),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    "Disclaimer: Your email will be included in the issue submission in case we need to contact you for more information.",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.openSans(fontSize: 14, fontStyle: FontStyle.italic),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Consumer<TokenProvider>(
+                      builder: (context, provider, child) => ElevatedButton(
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              if (_formKey.currentState!.validate()) {
+                                final bool? clearForm = await showDialog<bool>(
+                                    context: context,
+                                    builder: ((context) => IssueSubmissionDialog(
+                                        issue: Issue(
+                                            location: locationIdController.text.substring(0, 3) +
+                                                "-" +
+                                                locationIdController.text.substring(3),
+                                            email: provider.email!,
+                                            category: category!,
+                                            subCategory: subCategory,
+                                            subSubCategory: subSubCategory,
+                                            description: descriptionController.text))));
+                                if (clearForm == true) {
+                                  setState(() {
+                                    _formKey.currentState!.reset();
+                                    locationIdController.value = TextEditingValue.empty;
+                                    descriptionController.value = TextEditingValue.empty;
+                                    category = null;
+                                    subCategory = null;
+                                    subSubCategory = null;
+                                  });
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 4,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                              primary: Theme.of(context).colorScheme.primary,
+                              onPrimary: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            child: const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Text("Submit Issue")),
+                          )),
                 )
               ],
             ))));
