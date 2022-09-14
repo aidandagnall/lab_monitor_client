@@ -6,9 +6,12 @@ import 'package:lab_availability_checker/views/room_report_bottom_sheet.dart';
 import 'package:lab_availability_checker/views/status_indicator.dart';
 
 class ExpandableRoomCard extends StatefulWidget {
-  const ExpandableRoomCard({Key? key, required this.room, this.expanded = false}) : super(key: key);
+  const ExpandableRoomCard(
+      {Key? key, required this.room, this.expanded = false, this.onReportSubmission})
+      : super(key: key);
   final Room room;
   final bool expanded;
+  final void Function()? onReportSubmission;
   @override
   createState() => _ExpandableRoomCardState();
 }
@@ -39,12 +42,17 @@ class _ExpandableRoomCardState extends State<ExpandableRoomCard>
                 onTap: () => setState(() {
                       _selected = !_selected;
                     }),
-                onLongPress: () => showModalBottomSheet(
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                    context: context,
-                    builder: (ctx) => RoomReportBottomSheet(room: widget.room)),
+                onLongPress: () async {
+                  final submitted = await showModalBottomSheet<bool>(
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                      context: context,
+                      builder: (ctx) => RoomReportBottomSheet(room: widget.room));
+                  if (submitted == true) {
+                    widget.onReportSubmission == null ? {} : widget.onReportSubmission!();
+                  }
+                },
                 child: Column(
                   children: [
                     if (widget.room.name == "A32")

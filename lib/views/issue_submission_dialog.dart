@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/issue_api.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class IssueSubmissionDialog extends StatelessWidget {
@@ -25,9 +25,9 @@ class IssueSubmissionDialog extends StatelessWidget {
                     child: AnimatedSize(
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.ease,
-                        child: Consumer<TokenProvider>(
+                        child: Consumer<AuthProvider>(
                             builder: (context, provider, child) => FutureBuilder<bool>(
-                                future: submitReport(provider.token!),
+                                future: submitReport(provider.credentials!.accessToken),
                                 builder: (ctx, snapshot) {
                                   if (!snapshot.hasData) {
                                     return const IntrinsicHeight(

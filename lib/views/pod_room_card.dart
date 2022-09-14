@@ -5,8 +5,13 @@ import 'package:lab_availability_checker/views/room_report_bottom_sheet.dart';
 import 'package:lab_availability_checker/views/status_indicator.dart';
 
 class PodRoomCard extends StatelessWidget {
-  const PodRoomCard({Key? key, required this.room}) : super(key: key);
+  const PodRoomCard({
+    Key? key,
+    required this.room,
+    this.onReportSubmission,
+  }) : super(key: key);
   final Room room;
+  final void Function()? onReportSubmission;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -17,12 +22,17 @@ class PodRoomCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         child: InkWell(
-            onLongPress: () => showModalBottomSheet(
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                context: context,
-                builder: (ctx) => RoomReportBottomSheet(room: room)),
+            onLongPress: () async {
+              final submitted = await showModalBottomSheet<bool>(
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                  context: context,
+                  builder: (ctx) => RoomReportBottomSheet(room: room));
+              if (submitted == true) {
+                onReportSubmission == null ? {} : onReportSubmission!();
+              }
+            },
             child: SizedBox(
               height: 40,
               child: Padding(

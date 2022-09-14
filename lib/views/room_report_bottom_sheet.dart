@@ -5,7 +5,7 @@ import 'package:lab_availability_checker/models/popularity.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
 import 'package:lab_availability_checker/models/report.dart';
 import 'package:lab_availability_checker/models/room.dart';
-import 'package:lab_availability_checker/providers/token_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class RoomReportBottomSheet extends StatefulWidget {
@@ -84,18 +84,19 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Consumer<TokenProvider>(
+                        Consumer<AuthProvider>(
                             builder: (context, provider, child) => ElevatedButton(
                                 onPressed: () {
                                   ReportApi().submitReport(
                                       Report(
                                           room: widget.room.name,
                                           popularity: popularity,
+                                          email: provider.credentials!.user.email!,
                                           removalChance: beenRemoved
                                               ? RemovalChance.definite
                                               : RemovalChance.low),
-                                      provider.token!);
-                                  Navigator.pop(context);
+                                      provider.credentials!.accessToken);
+                                  Navigator.pop(context, true);
                                 },
                                 style: ButtonStyle(
                                     shape: MaterialStateProperty.all(const RoundedRectangleBorder(
