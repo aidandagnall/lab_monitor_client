@@ -1,8 +1,6 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lab_availability_checker/api/auth_api.dart';
 import 'package:lab_availability_checker/util/constants.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -19,7 +17,13 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getStoredCredentials() async {
+  updateCredentials() async {
+    if (credentials!.expiresAt.compareTo(DateTime.now()) == -1) {
+      credentials = await auth0.credentialsManager.credentials();
+    }
+  }
+
+  Future<Credentials?> getStoredCredentials() async {
     final isLoggedIn = await auth0.credentialsManager.hasValidCredentials();
     if (isLoggedIn) {
       credentials = await auth0.credentialsManager.credentials();
@@ -27,6 +31,7 @@ class AuthProvider extends ChangeNotifier {
       credentials = null;
     }
     notifyListeners();
+    return credentials;
   }
 
   logout() async {

@@ -86,8 +86,8 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                       children: [
                         Consumer<AuthProvider>(
                             builder: (context, provider, child) => ElevatedButton(
-                                onPressed: () {
-                                  ReportApi().submitReport(
+                                onPressed: () async {
+                                  await ReportApi().submitReport(
                                       Report(
                                           room: widget.room.name,
                                           popularity: popularity,

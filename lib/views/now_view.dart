@@ -11,8 +11,11 @@ import 'package:provider/provider.dart';
 import '../providers/expanded_card_provider.dart';
 
 class NowView extends StatefulWidget {
-  const NowView({Key? key, required this.token}) : super(key: key);
-  final String token;
+  const NowView({
+    Key? key,
+    required this.auth,
+  }) : super(key: key);
+  final AuthProvider auth;
 
   @override
   createState() => _NowViewState();
@@ -29,13 +32,13 @@ class _NowViewState extends State<NowView> {
   }
 
   Future<void> _getRooms() async {
-    final r = await RoomApi().getRooms(widget.token);
+    final r = await RoomApi().getRooms((await widget.auth.getStoredCredentials())!.accessToken);
     _rooms = r;
   }
 
   Future<void> _refreshRooms() async {
     _refreshKey.currentState?.show();
-    final r = await RoomApi().getRooms(widget.token);
+    final r = await RoomApi().getRooms((await widget.auth.getStoredCredentials())!.accessToken);
     setState(() {
       _rooms = r;
     });

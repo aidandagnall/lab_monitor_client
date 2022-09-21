@@ -15,6 +15,5 @@ class ReportApi {
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
         body: jsonEncode(report));
-    print(response.reasonPhrase);
   }
 }

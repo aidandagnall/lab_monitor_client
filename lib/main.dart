@@ -114,29 +114,34 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     states = [
       const IssueView(),
-      Consumer<AuthProvider>(
-          builder: (_, provider, child) => NowView(token: provider.credentials!.accessToken)),
-      const SettingsView(),
+      Consumer<AuthProvider>(builder: (_, provider, child) => NowView(auth: provider)),
+      Consumer<AuthProvider>(builder: (_, provider, child) => SettingsView(auth: provider)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(top: currentPage == 1 ? false : true, child: states[currentPage]!),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) => setState(() {
-          currentPage = value;
-        }),
-        currentIndex: currentPage,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.assignment_late_outlined), label: "Issues"),
-          BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-        ],
-      ),
-    );
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: SafeArea(top: currentPage == 1 ? false : true, child: states[currentPage]!),
+        bottomNavigationBar: Consumer<AuthProvider>(
+          builder: (context, provider, child) {
+            return BottomNavigationBar(
+              onTap: (value) => setState(() {
+                currentPage = value;
+              }),
+              currentIndex: currentPage,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              items: [
+                if (provider.credentials!.user.customClaims?.containsKey("read:issues") == true)
+                  const BottomNavigationBarItem(icon: Icon(Icons.assignment), label: "Issues"),
+                const BottomNavigationBarItem(
+                    icon: Icon(Icons.assignment_late_outlined), label: "Issue"),
+                const BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
+                const BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+              ],
+            );
+          },
+        ));
   }
 }
