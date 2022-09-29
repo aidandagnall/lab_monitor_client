@@ -8,7 +8,7 @@ class ReportApi {
   final client = http.Client();
 
   Future<void> submitReport(Report report, String token) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'report'),
+    final response = await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'report'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -18,7 +18,7 @@ class ReportApi {
   }
 
   Future<List<Report>?> getReports(String token) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'report'),
+    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'report'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode != 200) {
       return null;
@@ -29,7 +29,8 @@ class ReportApi {
   }
 
   Future<bool> deleteReport(String token, int id) async {
-    final response = await client.delete(Uri.http(Constants.API_URL, 'report/$id'),
+    final response = await client.delete(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'report/$id'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 202) {

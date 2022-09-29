@@ -5,7 +5,8 @@ class AuthApi {
   final client = http.Client();
 
   Future<String?> submitEmail(String email) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'auth/email'), headers: {
+    final response =
+        await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'auth/email'), headers: {
       "Accept": "*/*",
       "content-type": "application/x-www-form-urlencoded",
     }, body: {
@@ -19,7 +20,8 @@ class AuthApi {
   }
 
   Future<bool> submitCode(String verificationCode, String token) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'auth/code'), headers: {
+    final response =
+        await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'auth/code'), headers: {
       "content-type": "application/x-www-form-urlencoded",
       "Authorization": "Bearer $token"
     }, body: {
@@ -33,7 +35,8 @@ class AuthApi {
   }
 
   Future<bool> logout(String token) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'auth/logout'), headers: {
+    final response = await client
+        .post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'auth/logout'), headers: {
       "content-type": "application/x-www-form-urlencoded",
       "Authorization": "Bearer $token"
     });

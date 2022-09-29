@@ -8,7 +8,7 @@ class IssueApi {
   final client = http.Client();
 
   Future<bool> submitReport(Issue issue, String token) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'issue'),
+    final response = await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -23,7 +23,7 @@ class IssueApi {
   }
 
   Future<List<Issue>?> getIssues(String token) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'issue'),
+    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 200) {
@@ -33,7 +33,8 @@ class IssueApi {
   }
 
   Future<bool> markIssueCompleted(String token, int issueId) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'issue/$issueId/complete'),
+    final response = await client.post(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue/$issueId/complete'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode == 200) {
       return true;
@@ -42,7 +43,8 @@ class IssueApi {
   }
 
   Future<bool> deleteIssue(String token, int issueId) async {
-    final response = await client.delete(Uri.http(Constants.API_URL, 'issue/$issueId'),
+    final response = await client.delete(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue/$issueId'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode == 200) {

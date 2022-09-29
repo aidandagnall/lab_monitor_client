@@ -10,7 +10,8 @@ class UserApi {
   final client = http.Client();
 
   Future<User?> getUser(String token, String userId) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'user/$userId'),
+    final response = await client.get(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'user/$userId'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 200) {
@@ -22,7 +23,8 @@ class UserApi {
 
   Future<bool> removeUserPermission(String token, String userId, String permission) async {
     final response = await client.post(
-        Uri.http(Constants.API_URL, 'user/$userId/remove-permission/$permission'),
+        Uri.https(
+            Constants.AUTHORITY, Constants.PATH + 'user/$userId/remove-permission/$permission'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode != 202) {
       return false;
@@ -33,7 +35,7 @@ class UserApi {
 
   Future<bool> addUserPermission(String token, String userId, String permission) async {
     final response = await client.post(
-        Uri.http(Constants.API_URL, 'user/$userId/add-permission/$permission'),
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'user/$userId/add-permission/$permission'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode != 202) {
       return false;
@@ -43,7 +45,8 @@ class UserApi {
   }
 
   Future<UserPermissions?> getPermissions(String token) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'user/permissions'),
+    final response = await client.get(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'user/permissions'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 200) {

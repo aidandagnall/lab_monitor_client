@@ -9,7 +9,7 @@ class ModuleApi {
 
   Future<List<Module>?> getModules(String token) async {
     print(token);
-    final response = await client.get(Uri.http(Constants.API_URL, 'module'),
+    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'module'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 200) {

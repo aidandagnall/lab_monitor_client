@@ -9,7 +9,7 @@ class LabApi {
   final client = http.Client();
 
   Future<List<Lab>?> getLabs(String token) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'labs'),
+    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'labs'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 200) {
@@ -21,7 +21,7 @@ class LabApi {
   }
 
   Future<bool> postLab(String token, Lab lab) async {
-    final response = await client.post(Uri.http(Constants.API_URL, 'labs'),
+    final response = await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'labs'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -39,7 +39,7 @@ class LabApi {
 
   Future<bool> deleteLab(String token, int id) async {
     final response = await client.delete(
-      Uri.http(Constants.API_URL, 'labs/$id'),
+      Uri.https(Constants.AUTHORITY, Constants.PATH + 'labs/$id'),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },

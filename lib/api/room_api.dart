@@ -8,9 +8,9 @@ class RoomApi {
   final client = http.Client();
 
   Future<List<Room>?> getRooms(String token) async {
-    final response = await client.get(Uri.http(Constants.API_URL, 'room'),
+    print(token);
+    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + "room"),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
-
     if (response.statusCode != 200) {
       return null;
     }
