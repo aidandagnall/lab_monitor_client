@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:lab_availability_checker/api/report_api.dart';
 import 'package:lab_availability_checker/models/report.dart';

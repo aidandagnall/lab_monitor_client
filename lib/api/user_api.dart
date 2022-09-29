@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/models/user.dart';
 import 'package:lab_availability_checker/models/user_permissions.dart';
 import 'package:lab_availability_checker/util/constants.dart';

@@ -122,7 +122,7 @@ class _CreateLabDialogState extends State<CreateLabDialog> {
                                                   value: e,
                                                 ))
                                             .toList()
-                                        : [DropdownMenuItem(child: Text("Test"))],
+                                        : const [DropdownMenuItem(child: Text("Test"))],
                                     onChanged: (room) => selectedRoom = room))))),
                       ])),
                 ))));

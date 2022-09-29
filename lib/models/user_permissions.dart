@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class UserPermissions {
   final bool admin;
   final List<String> permissions;

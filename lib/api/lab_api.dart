@@ -30,7 +30,6 @@ class LabApi {
         body: jsonEncode(lab));
 
     if (response.statusCode != 201) {
-      print(response.reasonPhrase);
       return false;
     }
 
@@ -44,8 +43,6 @@ class LabApi {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-
-    print(response.reasonPhrase);
 
     if (response.statusCode != 200) {
       return false;

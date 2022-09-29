@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
-import 'package:lab_availability_checker/models/room.dart';
 
 class Lab {
   final int? id;

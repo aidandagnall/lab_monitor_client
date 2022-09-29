@@ -85,7 +85,7 @@ class _UserAdminPageState extends State<UserAdminPage> {
                       child: SingleChildScrollView(
                           child: Card(
                       child: Padding(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,

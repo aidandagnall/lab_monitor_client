@@ -8,7 +8,6 @@ class ModuleApi {
   final client = http.Client();
 
   Future<List<Module>?> getModules(String token) async {
-    print(token);
     final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'module'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 

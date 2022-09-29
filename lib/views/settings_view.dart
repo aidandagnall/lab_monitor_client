@@ -1,6 +1,4 @@
-import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/user_api.dart';
 import 'package:lab_availability_checker/models/module.dart';
@@ -11,7 +9,6 @@ import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:lab_availability_checker/providers/auth_provider.dart';
-import 'package:lab_availability_checker/util/constants.dart';
 import 'package:lab_availability_checker/views/admin_panel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

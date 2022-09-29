@@ -7,7 +7,6 @@ import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
 import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/providers/auth_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
 class LabAdminPage extends StatefulWidget {
