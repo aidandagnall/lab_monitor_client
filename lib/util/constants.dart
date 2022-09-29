@@ -8,11 +8,4 @@ class Constants {
   static String AUTH0_CALLBACK_URL = Platform.isAndroid
       ? dotenv.env['ANDROID_AUTH0_CALLBACK_URL']!
       : dotenv.env['IOS_AUTH0_CALLBACK_URL']!;
-  static List<String> ADMIN_PERMISSIONS = [
-    "delete:report",
-    "edit:user",
-    "delete:user",
-    "delete:issue",
-    "edit:issue"
-  ];
 }

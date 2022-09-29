@@ -1,9 +1,11 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/user_api.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
+import 'package:lab_availability_checker/models/user_permissions.dart';
 import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart';
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
@@ -26,14 +28,14 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   bool darkMode = false;
   late final SharedPreferences prefs;
-  late Future<void> _permissionsList;
-  List<String>? permissions;
+  late Future<void> _permissions;
+  UserPermissions? permissions;
 
   @override
   void initState() {
     getPreferences();
     super.initState();
-    _permissionsList = getPermissions();
+    _permissions = getPermissions();
   }
 
   void getPreferences() async {
@@ -43,16 +45,14 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<void> getPermissions() async {
     final _p =
-        await UserApi().getPermissions((await widget.auth.getStoredCredentials())!.accessToken) ??
-            [];
+        await UserApi().getPermissions((await widget.auth.getStoredCredentials())!.accessToken);
     permissions = _p;
-    print(permissions);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
         child: SingleChildScrollView(
             child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -61,26 +61,35 @@ class _SettingsViewState extends State<SettingsView> {
               height: 20,
             ),
             Consumer<AuthProvider>(
-                builder: (context, auth, child) => FutureBuilder(
-                    future: _permissionsList,
-                    builder: ((context, snapshot) {
-                      if (permissions != null &&
-                          permissions!.any((e) => Constants.ADMIN_PERMISSIONS.contains(e))) {
-                        return InkWell(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => AdminPanel(
-                                        permissions: permissions!,
-                                      )))),
-                          child: Padding(
-                              padding: const EdgeInsets.only(top: 10, bottom: 30),
-                              child: Row(children: const [Text("Admin Panel")])),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }))),
+                builder: (context, auth, child) => AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    child: FutureBuilder(
+                        future: _permissions,
+                        builder: ((context, snapshot) {
+                          if (permissions != null && permissions!.admin) {
+                            return Card(
+                                margin: EdgeInsets.zero,
+                                child: InkWell(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) => AdminPanel(
+                                                permissions: permissions!.permissions,
+                                              )))),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Row(children: [
+                                        Text(
+                                          "Admin Panel",
+                                          style: GoogleFonts.openSans(
+                                              fontWeight: FontWeight.bold, fontSize: 22),
+                                        )
+                                      ])),
+                                ));
+                          } else {
+                            return Container();
+                          }
+                        })))),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(

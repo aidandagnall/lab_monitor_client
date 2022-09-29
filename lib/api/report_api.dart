@@ -16,4 +16,25 @@ class ReportApi {
         },
         body: jsonEncode(report));
   }
+
+  Future<List<Report>?> getReports(String token) async {
+    final response = await client.get(Uri.http(Constants.API_URL, 'report'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+    if (response.statusCode != 200) {
+      return null;
+    }
+
+    final reports = (jsonDecode(response.body) as List).map((e) => Report.fromJson(e)).toList();
+    return reports;
+  }
+
+  Future<bool> deleteReport(String token, int id) async {
+    final response = await client.delete(Uri.http(Constants.API_URL, 'report/$id'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+
+    if (response.statusCode != 202) {
+      return false;
+    }
+    return true;
+  }
 }

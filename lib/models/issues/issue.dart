@@ -30,21 +30,43 @@ final List<IssueCategory> issueCategories = [
   OtherIssue(),
 ];
 
+enum IssueStatus { NEW, IN_PROGRESS, RESOLVED }
+
+extension IssueStatusString on IssueStatus {
+  String string() {
+    switch (this) {
+      case IssueStatus.NEW:
+        return "New";
+      case IssueStatus.IN_PROGRESS:
+        return "In Progress";
+      case IssueStatus.RESOLVED:
+        return "Resolved";
+    }
+  }
+}
+
 class Issue {
+  final int? id;
   final String location;
   final String email;
   final IssueCategory category;
   final IssueSubCategory? subCategory;
   final IssueSubSubCategory? subSubCategory;
   final String? description;
+  final IssueStatus? status;
+  final DateTime? dateSubmitted;
 
-  const Issue(
-      {required this.location,
-      required this.email,
-      required this.category,
-      this.subCategory,
-      this.subSubCategory,
-      this.description});
+  Issue({
+    this.id,
+    required this.location,
+    required this.email,
+    required this.category,
+    this.subCategory,
+    this.subSubCategory,
+    this.description,
+    this.status,
+    this.dateSubmitted,
+  });
 
   Map<String, dynamic> toJson() => {
         "location": location,
@@ -54,4 +76,35 @@ class Issue {
         "subSubCategory": subSubCategory?.name,
         "description": description
       };
+
+  factory Issue.fromJson(Map<String, dynamic> json) {
+    final cat = issueCategories.firstWhere((e) => e.name == json['category']);
+    final subCat = cat.subIssues?.firstWhere((e) => e.name == json['subCategory']);
+    final subSubCat = subCat?.subIssues?.firstWhere((e) => e.name == json['subSubCategory']);
+    final dateValues = (json['dateSubmitted'] as List).map((e) => e as int).toList();
+    return Issue(
+        id: json['id'],
+        location: json['location'],
+        email: json['email'],
+        category: cat,
+        subCategory: subCat,
+        subSubCategory: subSubCat,
+        description: json['description'],
+        status: IssueStatus.values.firstWhere((e) => e.name == json['status']),
+        dateSubmitted:
+            DateTime(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4]));
+  }
+
+  Issue copyWith(IssueStatus status) {
+    return Issue(
+      id: id,
+      location: location,
+      email: email,
+      category: category,
+      subCategory: subCategory,
+      subSubCategory: subSubCategory,
+      description: description,
+      status: status,
+    );
+  }
 }

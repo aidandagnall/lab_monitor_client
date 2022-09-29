@@ -21,4 +21,33 @@ class IssueApi {
 
     return false;
   }
+
+  Future<List<Issue>?> getIssues(String token) async {
+    final response = await client.get(Uri.http(Constants.API_URL, 'issue'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return (jsonDecode(response.body) as List).map((e) => Issue.fromJson(e)).toList();
+  }
+
+  Future<bool> markIssueCompleted(String token, int issueId) async {
+    final response = await client.post(Uri.http(Constants.API_URL, 'issue/$issueId/complete'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> deleteIssue(String token, int issueId) async {
+    final response = await client.delete(Uri.http(Constants.API_URL, 'issue/$issueId'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }
