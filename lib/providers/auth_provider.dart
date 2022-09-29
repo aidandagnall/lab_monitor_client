@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,7 +13,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   login() async {
-    final _credentials = await auth0.webAuthentication().login(audience: Constants.API_URL);
+    final _credentials = await auth0
+        .webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null)
+        .login(audience: Constants.API_URL);
     credentials = _credentials;
     notifyListeners();
   }
@@ -35,7 +38,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   logout() async {
-    await auth0.webAuthentication().logout();
+    await auth0.webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null).logout();
     await auth0.credentialsManager.clearCredentials();
     credentials = null;
     notifyListeners();
