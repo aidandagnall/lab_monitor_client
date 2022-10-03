@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
-import 'package:lab_availability_checker/models/room.dart';
 
 class Lab {
+  final int? id;
   final Module module;
   final int day;
   final String startTime;
   final String endTime;
   final RemovalChance? removalChance;
-  final List<Room> rooms;
+  final List<String> rooms;
 
   Lab(
-      {required this.module,
+      {this.id,
+      required this.module,
       required this.day,
       required this.startTime,
       required this.endTime,
@@ -21,6 +22,7 @@ class Lab {
 
   factory Lab.fromJson(Map<String, dynamic> json) {
     return Lab(
+        id: json['id'],
         module: Module.fromJson(json['module']),
         day: json['day'],
         startTime: json['startTime'],
@@ -29,7 +31,18 @@ class Lab {
             ? null
             : RemovalChance.values
                 .singleWhere((e) => e.toString() == "RemovalChance." + json['removalChance']),
-        rooms: json['rooms'].map<Room>((json) => Room.fromJson(json)).toList());
+        rooms: (json['rooms'] as List).map((e) => e.toString()).toList());
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'module': module.id,
+      'day': day,
+      'startTime': startTime,
+      'endTime': endTime,
+      'removalChance': removalChance?.name,
+      'room': rooms.first
+    };
   }
 
   String getStartTime() {

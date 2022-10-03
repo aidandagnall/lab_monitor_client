@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/api/report_api.dart';
 import 'package:lab_availability_checker/models/popularity.dart';
 import 'package:lab_availability_checker/models/removal_chance.dart';
 import 'package:lab_availability_checker/models/report.dart';
 import 'package:lab_availability_checker/models/room.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class RoomReportBottomSheet extends StatefulWidget {
   const RoomReportBottomSheet({Key? key, required this.room}) : super(key: key);
@@ -74,25 +77,33 @@ class _RoomReportBottomSheetState extends State<RoomReportBottomSheet> {
                                 ))
                       ],
                     ),
+                    const SizedBox(height: 10),
+                    Text("Disclaimer: Your email will be included with this report",
+                        textAlign: TextAlign.center, style: GoogleFonts.openSans()),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              ReportApi().submitReport(Report(
-                                  room: widget.room.name,
-                                  popularity: popularity,
-                                  removalChance:
-                                      beenRemoved ? RemovalChance.definite : RemovalChance.low));
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(15))))),
-                            child: const Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text("Submit", style: TextStyle(fontSize: 20))))
+                        Consumer<AuthProvider>(
+                            builder: (context, provider, child) => ElevatedButton(
+                                onPressed: () async {
+                                  await ReportApi().submitReport(
+                                      Report(
+                                          room: widget.room.name,
+                                          popularity: popularity,
+                                          email: provider.credentials!.user.email!,
+                                          removalChance: beenRemoved
+                                              ? RemovalChance.definite
+                                              : RemovalChance.low),
+                                      provider.credentials!.accessToken);
+                                  Navigator.pop(context, true);
+                                },
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(15))))),
+                                child: const Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text("Submit", style: TextStyle(fontSize: 20)))))
                       ],
                     )
                   ])),

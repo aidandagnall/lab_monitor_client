@@ -50,10 +50,12 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.aidandagnall.lab_monitor"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        manifestPlaceholders += [auth0Domain: "lab-monitor.eu.auth0.com", auth0Scheme: "lab-monitor"]
     }
 
    signingConfigs {

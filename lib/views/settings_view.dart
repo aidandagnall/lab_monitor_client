@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lab_availability_checker/api/user_api.dart';
 import 'package:lab_availability_checker/models/module.dart';
 import 'package:lab_availability_checker/models/module_code.dart';
+import 'package:lab_availability_checker/models/user_permissions.dart';
 import 'package:lab_availability_checker/providers/enable_tooltip_provider.dart';
 import 'package:lab_availability_checker/providers/expanded_card_provider.dart';
 import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
+import 'package:lab_availability_checker/views/admin_panel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({Key? key, required this.auth}) : super(key: key);
+  final AuthProvider auth;
 
   @override
   createState() => _SettingsViewState();
@@ -19,11 +25,14 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   bool darkMode = false;
   late final SharedPreferences prefs;
+  late Future<void> _permissions;
+  UserPermissions? permissions;
 
   @override
   void initState() {
     getPreferences();
     super.initState();
+    _permissions = getPermissions();
   }
 
   void getPreferences() async {
@@ -31,16 +40,53 @@ class _SettingsViewState extends State<SettingsView> {
     darkMode = prefs.getBool('settings/dark-mode') ?? false;
   }
 
+  Future<void> getPermissions() async {
+    final _p =
+        await UserApi().getPermissions((await widget.auth.getStoredCredentials())!.accessToken);
+    permissions = _p;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
-        child: Column(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+        child: SingleChildScrollView(
+            child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
               height: 20,
             ),
+            Consumer<AuthProvider>(
+                builder: (context, auth, child) => AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    child: FutureBuilder(
+                        future: _permissions,
+                        builder: ((context, snapshot) {
+                          if (permissions != null && permissions!.admin) {
+                            return Card(
+                                margin: EdgeInsets.zero,
+                                child: InkWell(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) => AdminPanel(
+                                                permissions: permissions!.permissions,
+                                              )))),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Row(children: [
+                                        Text(
+                                          "Admin Panel",
+                                          style: GoogleFonts.openSans(
+                                              fontWeight: FontWeight.bold, fontSize: 22),
+                                        )
+                                      ])),
+                                ));
+                          } else {
+                            return Container();
+                          }
+                        })))),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
@@ -141,8 +187,20 @@ class _SettingsViewState extends State<SettingsView> {
                           child: const Text("Get Involved")),
                     )
                   ],
-                ))
+                )),
+            Center(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: Consumer<AuthProvider>(
+                      builder: (context, provider, child) => TextButton(
+                          onPressed: () async {
+                            provider.logout();
+                          },
+                          child: const Text(
+                            "Logout",
+                          )),
+                    )))
           ],
-        ));
+        )));
   }
 }

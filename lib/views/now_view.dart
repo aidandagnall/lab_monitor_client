@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/room.dart';
+import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:lab_availability_checker/views/expandable_room_card.dart';
 import 'package:lab_availability_checker/views/pod_room_card.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,11 @@ import 'package:provider/provider.dart';
 import '../providers/expanded_card_provider.dart';
 
 class NowView extends StatefulWidget {
-  const NowView({Key? key}) : super(key: key);
+  const NowView({
+    Key? key,
+    required this.auth,
+  }) : super(key: key);
+  final AuthProvider auth;
 
   @override
   createState() => _NowViewState();
@@ -18,6 +23,7 @@ class NowView extends StatefulWidget {
 class _NowViewState extends State<NowView> {
   late Future<void> _roomList;
   List<Room>? _rooms;
+  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -25,12 +31,13 @@ class _NowViewState extends State<NowView> {
   }
 
   Future<void> _getRooms() async {
-    final r = await RoomApi().getRooms();
+    final r = await RoomApi().getRooms((await widget.auth.getStoredCredentials())!.accessToken);
     _rooms = r;
   }
 
   Future<void> _refreshRooms() async {
-    final r = await RoomApi().getRooms();
+    _refreshKey.currentState?.show();
+    final r = await RoomApi().getRooms((await widget.auth.getStoredCredentials())!.accessToken);
     setState(() {
       _rooms = r;
     });
@@ -75,12 +82,18 @@ class _NowViewState extends State<NowView> {
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: PodRoomCard(room: _pods[0]),
+                  child: PodRoomCard(
+                    room: _pods[0],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: PodRoomCard(room: _pods[1]),
+                  child: PodRoomCard(
+                    room: _pods[1],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
               ],
             ),
@@ -90,12 +103,18 @@ class _NowViewState extends State<NowView> {
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: PodRoomCard(room: _pods[2]),
+                  child: PodRoomCard(
+                    room: _pods[2],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: PodRoomCard(room: _pods[3]),
+                  child: PodRoomCard(
+                    room: _pods[3],
+                    onReportSubmission: _refreshRooms,
+                  ),
                 )),
               ],
             ),
@@ -103,6 +122,7 @@ class _NowViewState extends State<NowView> {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RefreshIndicator(
+                  key: _refreshKey,
                   onRefresh: () => _refreshRooms(),
                   edgeOffset: 100,
                   child: AnimationLimiter(
@@ -119,6 +139,7 @@ class _NowViewState extends State<NowView> {
                               builder: (ctx, provider, value) => ExpandableRoomCard(
                                     room: _labs[index],
                                     expanded: provider.expanded,
+                                    onReportSubmission: _refreshRooms,
                                   ));
                         }
                         return Padding(
