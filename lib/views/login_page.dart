@@ -56,8 +56,13 @@ class _LoginPageState extends State<LoginPage> {
                             : (state == LoginState.waitingForEmail
                                 ? Consumer<AuthProvider>(
                                     builder: (context, provider, child) =>
-                                        _EmailInput(callback: (_email) async {
-                                          provider.login();
+                                        _EmailInput(callback: (isAdmin) async {
+                                          // await provider.logout();
+                                          if (isAdmin) {
+                                            provider.loginWithPassword();
+                                          } else {
+                                            provider.login();
+                                          }
                                         }))
                                 : Consumer<AuthProvider>(
                                     builder: ((context, provider, child) => _CodeInput(
@@ -85,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
 
 class _EmailInput extends StatelessWidget {
   const _EmailInput({required this.callback});
-  final void Function(String) callback;
+  final void Function(bool) callback;
   @override
   Widget build(BuildContext context) {
     final emailController = TextEditingController();
@@ -99,9 +104,9 @@ class _EmailInput extends StatelessWidget {
               textAlign: TextAlign.center,
             )),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: ElevatedButton(
-            onPressed: () => callback(emailController.text),
+            onPressed: () => callback(false),
             style: ElevatedButton.styleFrom(
               elevation: 4,
               shape:
@@ -110,7 +115,17 @@ class _EmailInput extends StatelessWidget {
               onPrimary: Theme.of(context).colorScheme.onPrimary,
             ),
             child: Text(
-              "Login via auth0",
+              "Staff/Student Login",
+              style: GoogleFonts.openSans(),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(),
+          child: TextButton(
+            onPressed: () => callback(true),
+            child: Text(
+              "Admin Login",
               style: GoogleFonts.openSans(),
             ),
           ),

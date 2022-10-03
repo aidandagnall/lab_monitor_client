@@ -6,13 +6,24 @@ import 'package:lab_availability_checker/util/constants.dart';
 
 class AuthProvider extends ChangeNotifier {
   Credentials? credentials;
-  final auth0 = Auth0(dotenv.env['AUTH0_DOMAIN']!, dotenv.env['AUTH0_CLIENT_ID']!);
+  late Auth0 auth0;
+  // Auth0(dotenv.env['AUTH0_DOMAIN']!, dotenv.env['AUTH0_CLIENT_ID']!);
 
   AuthProvider() {
     getStoredCredentials();
   }
 
   login() async {
+    auth0 = Auth0(dotenv.env['AUTH0_DOMAIN']!, dotenv.env['AUTH0_CLIENT_ID']!);
+    final _credentials = await auth0
+        .webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null)
+        .login(audience: Constants.API_URL);
+    credentials = _credentials;
+    notifyListeners();
+  }
+
+  loginWithPassword() async {
+    auth0 = Auth0(dotenv.env['AUTH0_DOMAIN']!, dotenv.env['AUTH0_ADMIN_CLIENT_ID']!);
     final _credentials = await auth0
         .webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null)
         .login(audience: Constants.API_URL);

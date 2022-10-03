@@ -172,8 +172,12 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     const Center(
                         child: Text(
-                            "Thanks to Ben Flynn and Joe Sieniawski for their contributions in creating designs for this app",
+                            "Thanks to Ben Flynn and Joe Sieniawski for their help with designs and deployment",
                             textAlign: TextAlign.center)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Center(child: Text("Lab Monitor v1.1", textAlign: TextAlign.center)),
                     const SizedBox(
                       height: 60,
                     ),
@@ -185,6 +189,12 @@ class _SettingsViewState extends State<SettingsView> {
                           onPressed: () async => await launchUrl(
                               Uri.parse("https://github.com/aidandagnall/lab_monitor_client")),
                           child: const Text("Get Involved")),
+                    ),
+                    Center(
+                      child: TextButton(
+                          onPressed: () async => await launchUrl(
+                              Uri.parse("https://precursor.cs.nott.ac.uk/labmonitor/privacy.html")),
+                          child: const Text("View our Privacy Policy")),
                     )
                   ],
                 )),
@@ -192,14 +202,21 @@ class _SettingsViewState extends State<SettingsView> {
                 child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
                     child: Consumer<AuthProvider>(
-                      builder: (context, provider, child) => TextButton(
+                      builder: (context, provider, child) => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            primary: Theme.of(context).colorScheme.primary,
+                            onPrimary: Theme.of(context).colorScheme.onPrimary,
+                          ),
                           onPressed: () async {
                             provider.logout();
                           },
                           child: const Text(
                             "Logout",
                           )),
-                    )))
+                    ))),
           ],
         )));
   }
