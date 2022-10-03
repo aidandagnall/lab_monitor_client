@@ -56,22 +56,24 @@ class _LabAdminPage extends State<LabAdminPage> {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               labs == null
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: labs!.length,
-                      itemBuilder: (context, index) => _LabCard(
-                          lab: labs![index],
-                          onDelete: () async {
-                            final success = await LabApi().deleteLab(
-                                (await widget.auth.getStoredCredentials())!.accessToken,
-                                labs![index].id!);
-                            if (success) {
-                              setState(() {
-                                labs!.remove(labs![index]);
-                              });
-                            }
-                          })),
+                  : RefreshIndicator(
+                      onRefresh: getLabs,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: labs!.length,
+                          itemBuilder: (context, index) => _LabCard(
+                              lab: labs![index],
+                              onDelete: () async {
+                                final success = await LabApi().deleteLab(
+                                    (await widget.auth.getStoredCredentials())!.accessToken,
+                                    labs![index].id!);
+                                if (success) {
+                                  setState(() {
+                                    labs!.remove(labs![index]);
+                                  });
+                                }
+                              }))),
             ])));
   }
 }
