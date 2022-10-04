@@ -5,7 +5,6 @@ import 'package:lab_availability_checker/api/room_api.dart';
 import 'package:lab_availability_checker/models/lab.dart';
 import 'package:lab_availability_checker/models/room.dart';
 import 'package:lab_availability_checker/providers/auth_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:tuple/tuple.dart';
 

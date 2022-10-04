@@ -56,8 +56,8 @@ class _UserAdminPageState extends State<UserAdminPage> {
                                   elevation: 4,
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                                  primary: Theme.of(context).colorScheme.primary,
-                                  onPrimary: Theme.of(context).colorScheme.onPrimary,
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 child: const Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),

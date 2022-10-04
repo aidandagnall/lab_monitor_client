@@ -151,8 +151,8 @@ class _NowViewState extends State<NowView> {
                                   elevation: 4,
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(15))),
-                                  primary: Theme.of(context).colorScheme.primary,
-                                  onPrimary: Theme.of(context).colorScheme.onPrimary,
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                                 ),
                                 child: Row(
                                     mainAxisSize: MainAxisSize.max,

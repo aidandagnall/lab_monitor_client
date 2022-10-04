@@ -65,8 +65,10 @@ class IssueSubmissionDialog extends StatelessWidget {
                                               shape: const RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.all(Radius.circular(5))),
-                                              primary: Theme.of(context).colorScheme.primary,
-                                              onPrimary: Theme.of(context).colorScheme.onPrimary,
+                                              backgroundColor:
+                                                  Theme.of(context).colorScheme.primary,
+                                              foregroundColor:
+                                                  Theme.of(context).colorScheme.onPrimary,
                                             ),
                                             onPressed: () => Navigator.pop(context, snapshot.data!),
                                             child: const Padding(

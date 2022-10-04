@@ -93,7 +93,6 @@ class _EmailInput extends StatelessWidget {
   final void Function(bool) callback;
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
     return Column(
       children: [
         Padding(
@@ -111,8 +110,8 @@ class _EmailInput extends StatelessWidget {
               elevation: 4,
               shape:
                   const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-              primary: Theme.of(context).colorScheme.primary,
-              onPrimary: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
             child: Text(
               "Staff/Student Login",
@@ -195,8 +194,8 @@ class _CodeInputState extends State<_CodeInput> {
               elevation: 4,
               shape:
                   const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-              primary: Theme.of(context).colorScheme.primary,
-              onPrimary: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
             child: Text(
               "Submit",
