@@ -54,97 +54,113 @@ class _RoomScheduleViewState extends State<RoomScheduleView> {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: SingleChildScrollView(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                child: Column(children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: rooms == null
                           ? const Center(child: CircularProgressIndicator())
-                          : DropdownButtonFormField<Room>(
-                              decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                  border: OutlineInputBorder(),
-                                  labelText: "Room"),
-                              value: room,
-                              items: rooms!
-                                  .where((e) => e.type == RoomType.lab)
-                                  .map((e) => DropdownMenuItem<Room>(
-                                        child: Text(e.name),
-                                        value: e,
-                                      ))
-                                  .toList(),
-                              onChanged: (r) => setState(() {
-                                    room = r;
-                                  }))),
+                          : SizedBox(
+                              height: 40,
+                              child: ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                children: rooms!
+                                    .where((e) => e.type == RoomType.lab)
+                                    .map((e) => Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        child: ChoiceChip(
+                                            label: Text(
+                                              e.name,
+                                              style: GoogleFonts.openSans(
+                                                  color: room == e
+                                                      ? Theme.of(context).colorScheme.onPrimary
+                                                      : Theme.of(context).colorScheme.onSurface),
+                                            ),
+                                            selected: room == e,
+                                            selectedColor: Theme.of(context).colorScheme.primary,
+                                            onSelected: (bool selected) {
+                                              setState(() {
+                                                room = e;
+                                              });
+                                            })))
+                                    .toList(),
+                              ))),
                   if (room != null)
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Tuple2(1, "Monday"),
-                          Tuple2(2, "Tuesday"),
-                          Tuple2(3, "Wednesday"),
-                          Tuple2(4, "Thursday"),
-                          Tuple2(5, "Friday"),
-                        ]
-                            .map((tuple) => Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: StickyHeader(
-                                    header: Container(
-                                        height: 40.0,
-                                        color: Theme.of(context).colorScheme.surface,
-                                        // padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          tuple.item2,
-                                          style: GoogleFonts.openSans(
-                                            color: Theme.of(context).colorScheme.onSurface,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        )),
-                                    content: Column(
-                                      children: (labs!
-                                            ..sort((a, b) => a.startTime.compareTo(b.startTime)))
-                                          .where((e) =>
-                                              e.day == tuple.item1 && e.rooms.contains(room!.name))
-                                          .map(
-                                            (e) => Card(
-                                              child: Padding(
-                                                  padding: const EdgeInsets.all(15),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment.spaceBetween,
+                    SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Tuple2(1, "Monday"),
+                              Tuple2(2, "Tuesday"),
+                              Tuple2(3, "Wednesday"),
+                              Tuple2(4, "Thursday"),
+                              Tuple2(5, "Friday"),
+                            ]
+                                .map((tuple) => Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    child: StickyHeader(
+                                        header: Container(
+                                            height: 40.0,
+                                            color: Theme.of(context).colorScheme.surface,
+                                            // padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              tuple.item2,
+                                              style: GoogleFonts.openSans(
+                                                color: Theme.of(context).colorScheme.onSurface,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                              ),
+                                            )),
+                                        content: Column(
+                                          children: (labs!
+                                                ..sort(
+                                                    (a, b) => a.startTime.compareTo(b.startTime)))
+                                              .where((e) =>
+                                                  e.day == tuple.item1 &&
+                                                  e.rooms.contains(room!.name))
+                                              .map(
+                                                (e) => Card(
+                                                  child: Padding(
+                                                      padding: const EdgeInsets.all(15),
+                                                      child: Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment.start,
                                                         children: [
-                                                          Flexible(
-                                                              child: Text(
-                                                            e.module.name,
-                                                            softWrap: false,
-                                                            overflow: TextOverflow.ellipsis,
-                                                            style: GoogleFonts.openSans(
-                                                                color: Theme.of(context)
-                                                                    .colorScheme
-                                                                    .onPrimaryContainer),
-                                                          )),
-                                                          const SizedBox(
-                                                            height: 10,
+                                                          Row(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.start,
+                                                            children: [
+                                                              Flexible(
+                                                                  child: Text(
+                                                                e.module.name,
+                                                                softWrap: false,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                style: GoogleFonts.openSans(
+                                                                    color: Theme.of(context)
+                                                                        .colorScheme
+                                                                        .onPrimaryContainer),
+                                                              )),
+                                                              const SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Text(e.module.code),
+                                                            ],
                                                           ),
-                                                          Text(e.module.code),
+                                                          Text(e.getStartTime() +
+                                                              " - " +
+                                                              e.getEndTime())
                                                         ],
-                                                      ),
-                                                      Text(
-                                                          e.getStartTime() + " - " + e.getEndTime())
-                                                    ],
-                                                  )),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ))))
-                            .toList())
+                                                      )),
+                                                ),
+                                              )
+                                              .toList(),
+                                        ))))
+                                .toList()))
                   else
                     const SizedBox(
                       height: 300,
