@@ -142,6 +142,9 @@ class _NowViewState extends State<NowView> {
                           children: [
                             ElevatedButton(
                                 onPressed: () => showModalBottomSheet(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.vertical(top: Radius.circular(20))),
                                     context: context,
                                     builder: (context) => RoomScheduleView(auth: widget.auth)),
                                 style: ElevatedButton.styleFrom(
