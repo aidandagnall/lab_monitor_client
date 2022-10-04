@@ -67,13 +67,15 @@ class _RoomScheduleViewState extends State<RoomScheduleView> {
                                     .where((e) => e.type == RoomType.lab)
                                     .map((e) => Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 5),
-                                        child: ChoiceChip(
+                                        child: FilterChip(
+                                            showCheckmark: false,
+                                            labelStyle: GoogleFonts.openSans(
+                                                fontWeight: FontWeight.bold,
+                                                color: room == e
+                                                    ? Theme.of(context).colorScheme.onPrimary
+                                                    : Theme.of(context).colorScheme.onSurface),
                                             label: Text(
                                               e.name,
-                                              style: GoogleFonts.openSans(
-                                                  color: room == e
-                                                      ? Theme.of(context).colorScheme.onPrimary
-                                                      : Theme.of(context).colorScheme.onSurface),
                                             ),
                                             selected: room == e,
                                             selectedColor: Theme.of(context).colorScheme.primary,
