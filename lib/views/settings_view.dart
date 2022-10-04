@@ -10,6 +10,7 @@ import 'package:lab_availability_checker/providers/module_code_provider.dart';
 import 'package:lab_availability_checker/providers/theme_provider.dart';
 import 'package:lab_availability_checker/providers/auth_provider.dart';
 import 'package:lab_availability_checker/views/admin_panel.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -172,12 +173,25 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     const Center(
                         child: Text(
-                            "Thanks to Ben Flynn and Joe Sieniawski for their help with designs and deployment",
+                            "Thanks to Joe Sieniawski and Ben Flynn for their help with designs and deployment",
                             textAlign: TextAlign.center)),
                     const SizedBox(
                       height: 10,
                     ),
-                    const Center(child: Text("Lab Monitor v1.1", textAlign: TextAlign.center)),
+                    Center(
+                        child: FutureBuilder<PackageInfo>(
+                            future: PackageInfo.fromPlatform(),
+                            initialData: PackageInfo(
+                              appName: 'Unknown',
+                              packageName: 'Unknown',
+                              version: 'Unknown',
+                              buildNumber: 'Unknown',
+                              buildSignature: 'Unknown',
+                            ),
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? Text("${snapshot.data!.appName} ${snapshot.data!.version}",
+                                    textAlign: TextAlign.center)
+                                : Container())),
                     const SizedBox(
                       height: 60,
                     ),
@@ -193,7 +207,7 @@ class _SettingsViewState extends State<SettingsView> {
                     Center(
                       child: TextButton(
                           onPressed: () async => await launchUrl(
-                              Uri.parse("https://precursor.cs.nott.ac.uk/labmonitor/privacy.html")),
+                              Uri.parse("https://precursor.cs.nott.ac.uk/privacy/labmonitor.html")),
                           child: const Text("View our Privacy Policy")),
                     )
                   ],

@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.4+5
+version: 1.1.0+6
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -25,6 +25,9 @@ dependencies:
   auth0_flutter: ^1.0.0
   weekday_selector: ^1.1.0
   intl: ^0.17.0
+  package_info_plus: ^1.4.3+1
+  sticky_headers: ^0.3.0+2
+  tuple: ^2.0.0
 
 flutter_icons:
   android: "launcher_icon" 
