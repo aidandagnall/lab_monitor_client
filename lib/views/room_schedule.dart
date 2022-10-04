@@ -56,7 +56,7 @@ class _RoomScheduleViewState extends State<RoomScheduleView> {
               child: SingleChildScrollView(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: rooms == null
                           ? const Center(child: CircularProgressIndicator())
                           : DropdownButtonFormField<Room>(
