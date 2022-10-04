@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => EnableTooltipProvider.initial(
                           snapshot.data!.getBool('settings/enabled-tooltips') ?? false)),
-                  ChangeNotifierProvider(create: (_) => AuthProvider())
+                  ChangeNotifierProvider(create: (_) => AuthProvider()),
                 ],
                 child: Consumer<ThemeProvider>(
                     child: Consumer<AuthProvider>(builder: ((context, provider, child) {
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: SafeArea(top: currentPage == 1 ? false : true, child: states[currentPage]!),
+        body: SafeArea(top: true, child: states[currentPage]!),
         bottomNavigationBar: Consumer<AuthProvider>(
           builder: (context, provider, child) {
             return BottomNavigationBar(
