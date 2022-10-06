@@ -52,29 +52,29 @@ class _LabAdminPage extends State<LabAdminPage> {
           },
         ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              labs == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : RefreshIndicator(
-                      onRefresh: getLabs,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: labs!.length,
-                          itemBuilder: (context, index) => _LabCard(
-                              lab: labs![index],
-                              onDelete: () async {
-                                final success = await LabApi().deleteLab(
-                                    (await widget.auth.getStoredCredentials())!.accessToken,
-                                    labs![index].id!);
-                                if (success) {
-                                  setState(() {
-                                    labs!.remove(labs![index]);
-                                  });
-                                }
-                              }))),
-            ])));
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          child: labs == null
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                  onRefresh: getLabs,
+                  child: ListView.builder(
+                      clipBehavior: Clip.none,
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: labs!.length,
+                      itemBuilder: (context, index) => _LabCard(
+                          lab: labs![index],
+                          onDelete: () async {
+                            final success = await LabApi().deleteLab(
+                                (await widget.auth.getStoredCredentials())!.accessToken,
+                                labs![index].id!);
+                            if (success) {
+                              setState(() {
+                                labs!.remove(labs![index]);
+                              });
+                            }
+                          }))),
+        ));
   }
 }
 
