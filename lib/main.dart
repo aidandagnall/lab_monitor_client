@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -62,15 +63,14 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(
                       create: (_) => EnableTooltipProvider.initial(
                           snapshot.data!.getBool('settings/enabled-tooltips') ?? false)),
-                  ChangeNotifierProvider(create: (_) => AuthProvider()),
+                  ChangeNotifierProvider(
+                      create: (_) => AuthProvider(snapshot.data!.getBool('login/is-admin') ?? false
+                          ? LoginType.admin
+                          : LoginType.user)),
                 ],
                 child: Consumer<ThemeProvider>(
                     child: Consumer<AuthProvider>(builder: ((context, provider, child) {
-                  if (provider.credentials != null) {
-                    return const MyHomePage();
-                  } else {
-                    return const LoginPage();
-                  }
+                  return MyHomePage(auth: provider);
                 })), builder: (c, themeProvider, child) {
                   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                       statusBarColor: Colors.transparent, // transparent status bar
@@ -103,7 +103,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key, required this.auth}) : super(key: key);
+  final AuthProvider auth;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -111,7 +112,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late List<Widget?> states;
   int currentPage = 1;
-
+  Future<Credentials?>? credentials;
   @override
   void initState() {
     super.initState();
@@ -120,31 +121,36 @@ class _MyHomePageState extends State<MyHomePage> {
       Consumer<AuthProvider>(builder: (_, provider, child) => NowView(auth: provider)),
       Consumer<AuthProvider>(builder: (_, provider, child) => SettingsView(auth: provider)),
     ];
+    credentials = widget.auth.getStoredCredentials();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: SafeArea(top: true, child: states[currentPage]!),
-        bottomNavigationBar: Consumer<AuthProvider>(
-          builder: (context, provider, child) {
-            return BottomNavigationBar(
-              onTap: (value) => setState(() {
-                currentPage = value;
-              }),
-              currentIndex: currentPage,
-              backgroundColor: Theme.of(context).colorScheme.background,
-              items: [
-                if (provider.credentials!.user.customClaims?.containsKey("read:issues") == true)
-                  const BottomNavigationBarItem(icon: Icon(Icons.assignment), label: "Issues"),
-                const BottomNavigationBarItem(
-                    icon: Icon(Icons.assignment_late_outlined), label: "Issue"),
-                const BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
-                const BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-              ],
-            );
-          },
-        ));
+    return Consumer<AuthProvider>(
+        builder: (context, provider, child) => FutureBuilder<Credentials?>(
+            future: credentials,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (provider.credentials == null) {
+                return const LoginPage();
+              }
+              return Scaffold(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  body: SafeArea(top: true, child: states[currentPage]!),
+                  bottomNavigationBar: BottomNavigationBar(
+                      onTap: (value) => setState(() {
+                            currentPage = value;
+                          }),
+                      currentIndex: currentPage,
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      items: const [
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.assignment_late_outlined), label: "Issue"),
+                        BottomNavigationBarItem(icon: Icon(Icons.access_time), label: "Now"),
+                        BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+                      ]));
+            }));
   }
 }
