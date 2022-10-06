@@ -61,6 +61,7 @@ class _RoomScheduleViewState extends State<RoomScheduleView> {
                           : SizedBox(
                               height: 40,
                               child: ListView(
+                                clipBehavior: Clip.none,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
                                 children: rooms!
@@ -79,6 +80,11 @@ class _RoomScheduleViewState extends State<RoomScheduleView> {
                                             ),
                                             selected: room == e,
                                             selectedColor: Theme.of(context).colorScheme.primary,
+                                            backgroundColor:
+                                                Theme.of(context).colorScheme.surfaceVariant,
+                                            side: BorderSide(style: BorderStyle.none),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(100)),
                                             onSelected: (bool selected) {
                                               setState(() {
                                                 room = e;
