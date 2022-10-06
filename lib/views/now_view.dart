@@ -76,14 +76,6 @@ class _NowViewState extends State<NowView> {
           final _labs = _rooms!.where((e) => e.type == RoomType.lab).toList();
           final _pods = _rooms!.where((e) => e.type == RoomType.pod).toList();
           final _podRows = [
-            Padding(
-                padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-                  Text("Pods"),
-                  Divider(
-                    color: Colors.black,
-                  )
-                ])),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -140,36 +132,6 @@ class _NowViewState extends State<NowView> {
                           childAnimationBuilder: (child) => SlideAnimation(
                               verticalOffset: 50, child: FadeInAnimation(child: child)),
                           children: [
-                            ElevatedButton(
-                                onPressed: () => showModalBottomSheet(
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.vertical(top: Radius.circular(20))),
-                                    context: context,
-                                    builder: (context) => RoomScheduleView(auth: widget.auth)),
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 4,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                                ),
-                                child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                        size: 18,
-                                      ),
-                                      Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 10),
-                                          child: Text(
-                                            "Room Schedules",
-                                            style: GoogleFonts.openSans(fontSize: 18),
-                                          )),
-                                    ])),
                             ..._labs
                                 .map((e) => Consumer<ExpandedCardProvider>(
                                     builder: (ctx, provider, value) => ExpandableRoomCard(
@@ -178,6 +140,45 @@ class _NowViewState extends State<NowView> {
                                           onReportSubmission: _refreshRooms,
                                         )))
                                 .toList(),
+                            ElevatedButton(
+                                onPressed: () => showModalBottomSheet(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.vertical(top: Radius.circular(20))),
+                                    context: context,
+                                    builder: (context) => RoomScheduleView(auth: widget.auth)),
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 1,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  backgroundColor: Theme.of(context).colorScheme.surface,
+                                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                                ),
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.view_agenda,
+                                        size: 18,
+                                      ),
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 10),
+                                          child: Text(
+                                            "View Schedules",
+                                            style: GoogleFonts.openSans(fontSize: 16),
+                                          )),
+                                    ])),
+                            Padding(
+                                padding: const EdgeInsets.only(top: 25, left: 4, right: 4),
+                                child:
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                  const Text("Pods"),
+                                  Divider(
+                                    color: Theme.of(context).colorScheme.onSurface,
+                                  )
+                                ])),
                             ..._podRows,
                             const SizedBox(
                               height: 10,
