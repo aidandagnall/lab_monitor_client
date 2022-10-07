@@ -235,9 +235,7 @@ class _IssueViewState extends State<IssueView> {
                                     context: context,
                                     builder: ((context) => IssueSubmissionDialog(
                                         issue: Issue(
-                                            location: locationIdController.text.substring(0, 3) +
-                                                "-" +
-                                                locationIdController.text.substring(3),
+                                            location: locationIdController.text,
                                             email: provider.credentials!.user.email!,
                                             category: category!,
                                             subCategory: subCategory,
@@ -287,6 +285,6 @@ class _IssueViewState extends State<IssueView> {
       ));
       return "";
     }
-    return code.replaceAll("-", "");
+    return code;
   }
 }
