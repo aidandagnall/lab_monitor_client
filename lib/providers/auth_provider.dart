@@ -27,9 +27,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   login() async {
+    changeLoginType(LoginType.user);
     final _credentials = await auth0
         .webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null)
-        .login(audience: Constants.API_URL);
+        .login(audience: Constants.AUDIENCE);
     credentials = _credentials;
     _prefs!.setBool("login/is-admin", false);
     notifyListeners();
@@ -47,7 +48,7 @@ class AuthProvider extends ChangeNotifier {
     changeLoginType(LoginType.admin);
     final _credentials = await auth0
         .webAuthentication(scheme: Platform.isAndroid ? "lab-monitor" : null)
-        .login(audience: Constants.API_URL);
+        .login(audience: Constants.AUDIENCE);
     credentials = _credentials;
     _prefs!.setBool("login/is-admin", true);
 
@@ -62,11 +63,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<Credentials?> getStoredCredentials() async {
-    final isLoggedIn = await auth0.credentialsManager.hasValidCredentials();
-    if (isLoggedIn) {
+    try {
       credentials = await auth0.credentialsManager.credentials();
-    } else {
-      credentials = null;
+    } on CredentialsManagerException {
+      final isLoggedIn = await auth0.credentialsManager.hasValidCredentials();
+      if (isLoggedIn) {
+        credentials = await auth0.credentialsManager.credentials();
+      } else {
+        credentials = null;
+      }
     }
     notifyListeners();
     return credentials;

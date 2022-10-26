@@ -12,4 +12,5 @@ class Constants {
       : dotenv.env['IOS_AUTH0_CALLBACK_URL']!;
   static String AUTHORITY = dotenv.env['AUTHORITY']!;
   static String PATH = dotenv.env['PATH']!;
+  static String AUDIENCE = dotenv.env['AUDIENCE']!;
 }
