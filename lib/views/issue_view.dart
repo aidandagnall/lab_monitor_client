@@ -61,7 +61,7 @@ class _IssueViewState extends State<IssueView> {
                                     if (value == null || value.isEmpty) {
                                       return "Please enter a Location ID";
                                     }
-                                    if (RegExp(r'^[0-2][0-9]{5,5}$').hasMatch(value)) {
+                                    if (RegExp(r'^[0-3][0-9]{5,5}$').hasMatch(value)) {
                                       return null;
                                     }
                                     return "Please enter a valid Location ID";
