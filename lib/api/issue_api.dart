@@ -42,6 +42,16 @@ class IssueApi {
     return false;
   }
 
+  Future<bool> markIssueInProgress(String token, int issueId) async {
+    final response = await client.post(
+        Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue/$issueId/in-progress'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   Future<bool> deleteIssue(String token, int issueId) async {
     final response = await client.delete(
         Uri.https(Constants.AUTHORITY, Constants.PATH + 'issue/$issueId'),
