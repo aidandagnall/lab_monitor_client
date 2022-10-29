@@ -117,7 +117,7 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
                               onDelete: () => deleteIssue(e.id!)))
                           .toList(),
                       if (issues!.where((e) => e.status == filter).isEmpty)
-                        Center(child: Text("No issues found"))
+                        const Center(child: Text("No issues found"))
                     ],
                   )),
         ));
@@ -125,8 +125,13 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
 }
 
 class _IssueCard extends StatelessWidget {
-  const _IssueCard({required this.issue, required this.onComplete, required this.onDelete});
+  const _IssueCard(
+      {required this.issue,
+      required this.onComplete,
+      required this.inProgress,
+      required this.onDelete});
   final void Function()? onComplete;
+  final void Function()? inProgress;
   final void Function()? onDelete;
   final Issue issue;
   @override
@@ -274,17 +279,19 @@ class _IssueCard extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => UserAdminPage(email: issue.email))),
                       icon: const Icon(Icons.person))),
-<<<<<<< Updated upstream
-              if (issue.status == IssueStatus.NEW && onComplete != null)
-=======
               if (issue.status == IssueStatus.NEW && inProgress != null)
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child:
-                        IconButton(onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
+                        IconButton(onPressed: onComplete, icon: const Icon(Icons.pending_actions))),
+              if (issue.status == IssueStatus.NEW && onComplete != null)
+                if (issue.status == IssueStatus.NEW && inProgress != null)
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: IconButton(
+                          onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
               if ([IssueStatus.NEW, IssueStatus.IN_PROGRESS].contains(issue.status) &&
                   onComplete != null)
->>>>>>> Stashed changes
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: IconButton(onPressed: onComplete, icon: const Icon(Icons.check))),
