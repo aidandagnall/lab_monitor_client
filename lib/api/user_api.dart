@@ -4,14 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:lab_availability_checker/api/api.dart';
 import 'package:lab_availability_checker/models/user.dart';
 import 'package:lab_availability_checker/models/user_permissions.dart';
-import 'package:lab_availability_checker/util/constants.dart';
 
 class UserApi {
   final client = http.Client();
 
   Future<List<String>?> getAllPermissions() async {
     final response = await client.get(
-      UriFactory.getRoute('permissions/all'),
+      UriFactory.getRoute('user/permissions/all'),
     );
 
     if (response.statusCode != 200) {
@@ -34,8 +33,7 @@ class UserApi {
 
   Future<bool> removeUserPermission(String token, String userId, String permission) async {
     final response = await client.post(
-        Uri.https(
-            Constants.AUTHORITY, Constants.PATH + 'user/$userId/remove-permission/$permission'),
+        UriFactory.getRoute('user/$userId/remove-permission/$permission'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode != 202) {
       return false;
