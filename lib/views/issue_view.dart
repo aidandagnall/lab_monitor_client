@@ -17,6 +17,7 @@ class _IssueViewState extends State<IssueView> {
   TextEditingController locationIdController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String? qrCodeScan;
   IssueCategory? category;
   IssueSubCategory? subCategory;
   IssueSubSubCategory? subSubCategory;
@@ -277,7 +278,14 @@ class _IssueViewState extends State<IssueView> {
                 appBar: AppBar(title: const Text("Scan a location tag")),
                 body: MobileScanner(
                   allowDuplicates: false,
-                  onDetect: (barcode, args) => Navigator.pop(context, barcode.rawValue),
+                  onDetect: (barcode, args) {
+                    if (qrCodeScan == null) {
+                      Navigator.pop(context, barcode.rawValue);
+                    }
+                    setState(() {
+                      qrCodeScan = barcode.rawValue;
+                    });
+                  },
                 ))));
     if (code == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
