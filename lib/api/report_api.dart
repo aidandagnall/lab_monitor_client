@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:lab_availability_checker/api/api.dart';
 import 'package:lab_availability_checker/models/report.dart';
-import 'package:lab_availability_checker/util/constants.dart';
 
 class ReportApi {
   final client = http.Client();
 
   Future<void> submitReport(Report report, String token) async {
-    final response = await client.post(Uri.https(Constants.AUTHORITY, Constants.PATH + 'report'),
+    final response = await client.post(UriFactory.getRoute('report'),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
@@ -18,7 +18,7 @@ class ReportApi {
   }
 
   Future<List<Report>?> getReports(String token) async {
-    final response = await client.get(Uri.https(Constants.AUTHORITY, Constants.PATH + 'report'),
+    final response = await client.get(UriFactory.getRoute('report'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     if (response.statusCode != 200) {
       return null;
@@ -29,8 +29,7 @@ class ReportApi {
   }
 
   Future<bool> deleteReport(String token, int id) async {
-    final response = await client.delete(
-        Uri.https(Constants.AUTHORITY, Constants.PATH + 'report/$id'),
+    final response = await client.delete(UriFactory.getRoute('report/$id'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
 
     if (response.statusCode != 202) {
