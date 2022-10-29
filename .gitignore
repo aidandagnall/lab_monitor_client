@@ -107,6 +107,9 @@ unlinked_spec.ds
 **/macos/Flutter/ephemeral
 **/xcuserdata/
 
+# ignore IOS build outputs
+**/ios/*build/
+
 # Coverage
 coverage/
 
