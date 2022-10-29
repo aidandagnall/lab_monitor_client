@@ -55,6 +55,7 @@ class Issue {
   final String? description;
   final IssueStatus? status;
   final DateTime? dateSubmitted;
+  final String? closedBy;
 
   Issue({
     this.id,
@@ -66,6 +67,7 @@ class Issue {
     this.description,
     this.status,
     this.dateSubmitted,
+    this.closedBy,
   });
 
   Map<String, dynamic> toJson() => {
@@ -83,16 +85,18 @@ class Issue {
     final subSubCat = subCat?.subIssues?.firstWhere((e) => e.name == json['subSubCategory']);
     final dateValues = (json['dateSubmitted'] as List).map((e) => e as int).toList();
     return Issue(
-        id: json['id'],
-        location: json['location'],
-        email: json['email'],
-        category: cat,
-        subCategory: subCat,
-        subSubCategory: subSubCat,
-        description: json['description'],
-        status: IssueStatus.values.firstWhere((e) => e.name == json['status']),
-        dateSubmitted:
-            DateTime(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4]));
+      id: json['id'],
+      location: json['location'],
+      email: json['email'],
+      category: cat,
+      subCategory: subCat,
+      subSubCategory: subSubCat,
+      description: json['description'],
+      status: IssueStatus.values.firstWhere((e) => e.name == json['status']),
+      dateSubmitted:
+          DateTime(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4]),
+      closedBy: json['closedBy'],
+    );
   }
 
   Issue copyWith(IssueStatus status) {

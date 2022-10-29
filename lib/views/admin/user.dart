@@ -14,11 +14,21 @@ class UserAdminPage extends StatefulWidget {
 class _UserAdminPageState extends State<UserAdminPage> {
   late TextEditingController emailController;
   TextEditingController newPermissionController = TextEditingController();
+  List<String>? permissions;
   User? user;
+
   @override
   void initState() {
     emailController = TextEditingController(text: widget.email);
     super.initState();
+    _getPermissions();
+  }
+
+  void _getPermissions() async {
+    final p = await UserApi().getAllPermissions();
+    setState(() {
+      permissions = p;
+    });
   }
 
   @override
@@ -93,32 +103,75 @@ class _UserAdminPageState extends State<UserAdminPage> {
                               Text("Email: " + user!.email),
                               Text("ID: " + user!.id),
                               Column(
-                                  children: user!.permissions
-                                      .map(
-                                        (e) => Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(e),
-                                            Consumer<AuthProvider>(
-                                                builder: (context, auth, child) => IconButton(
-                                                    onPressed: () async {
-                                                      final success = await UserApi()
-                                                          .removeUserPermission(
-                                                              (await auth.getStoredCredentials())!
-                                                                  .accessToken,
-                                                              user!.id,
-                                                              e);
-                                                      if (success) {
-                                                        setState(() {
-                                                          user!.permissions.remove(e);
-                                                        });
-                                                      }
-                                                    },
-                                                    icon: const Icon(Icons.close)))
-                                          ],
-                                        ),
-                                      )
-                                      .toList()),
+                                  children: permissions == null
+                                      ? const [
+                                          Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        ]
+                                      : permissions!
+                                          .map((e) => Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(e),
+                                                  Consumer<AuthProvider>(
+                                                    builder: (context, auth, child) => Checkbox(
+                                                      value: user!.permissions.contains(e),
+                                                      onChanged: (givePermission) async {
+                                                        final success = givePermission!
+                                                            ? await UserApi().addUserPermission(
+                                                                (await auth.getStoredCredentials())!
+                                                                    .accessToken,
+                                                                user!.id,
+                                                                e)
+                                                            : await UserApi().removeUserPermission(
+                                                                (await auth.getStoredCredentials())!
+                                                                    .accessToken,
+                                                                user!.id,
+                                                                e);
+
+                                                        if (success) {
+                                                          setState(() {
+                                                            if (givePermission) {
+                                                              user!.permissions.add(e);
+                                                            } else {
+                                                              user!.permissions.remove(e);
+                                                            }
+                                                          });
+                                                        }
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ))
+                                          .toList()
+                                  // user!.permissions
+                                  //     .map(
+                                  //       (e) => Row(
+                                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  //         children: [
+                                  //           Text(e),
+                                  //           Consumer<AuthProvider>(
+                                  //               builder: (context, auth, child) => IconButton(
+                                  //                   onPressed: () async {
+                                  //                     final success = await UserApi()
+                                  //                         .removeUserPermission(
+                                  //                             (await auth.getStoredCredentials())!
+                                  //                                 .accessToken,
+                                  //                             user!.id,
+                                  //                             e);
+                                  //                     if (success) {
+                                  //                       setState(() {
+                                  //                         user!.permissions.remove(e);
+                                  //                       });
+                                  //                     }
+                                  //                   },
+                                  //                   icon: const Icon(Icons.close)))
+                                  //         ],
+                                  //       ),
+                                  //     )
+                                  //     .toList()),
+                                  ),
                               const SizedBox(
                                 height: 20,
                               ),

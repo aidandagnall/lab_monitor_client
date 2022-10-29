@@ -55,6 +55,18 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
     });
   }
 
+  void inProgressIssue(int id) async {
+    final success = await IssueApi()
+        .markIssueInProgress((await widget.auth.getStoredCredentials())!.accessToken, id);
+    if (!success) {
+      return;
+    }
+    final index = issues!.indexWhere((e) => e.id == id);
+    setState(() {
+      issues![index] = issues![index].copyWith(IssueStatus.IN_PROGRESS);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,48 +77,50 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
               onPressed: () => Navigator.of(context).pop(),
             )),
         body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IntrinsicWidth(
-                      child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: DropdownButtonFormField<IssueStatus>(
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              ),
-                              value: filter,
-                              items: IssueStatus.values
-                                  .map((e) => DropdownMenuItem<IssueStatus>(
-                                        child: Text(e.string()),
-                                        value: e,
-                                      ))
-                                  .toList(),
-                              onChanged: (value) => setState(() {
-                                    filter = value!;
-                                  }))))
-                ],
-              ),
-              issues == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : RefreshIndicator(
-                      onRefresh: () async => await getIssues(),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        clipBehavior: Clip.none,
-                        itemCount: issues!.length,
-                        itemBuilder: (context, index) => issues![index].status == filter
-                            ? _IssueCard(
-                                issue: issues![index],
-                                onComplete: () => completeIssue(issues![index].id!),
-                                onDelete: () => deleteIssue(issues![index].id!),
-                              )
-                            : Container(),
-                      )),
-            ])));
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          child: issues == null
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                  onRefresh: () async => await getIssues(),
+                  child: ListView(
+                    clipBehavior: Clip.none,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        IntrinsicWidth(
+                            child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: DropdownButtonFormField<IssueStatus>(
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    ),
+                                    value: filter,
+                                    items: IssueStatus.values
+                                        .map((e) => DropdownMenuItem<IssueStatus>(
+                                              child: Text(e.string()),
+                                              value: e,
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) => setState(() {
+                                          filter = value!;
+                                        }))))
+                      ]),
+                      ...issues!
+                          .where((e) => e.status == filter)
+                          .map((e) => _IssueCard(
+                              issue: e,
+                              onComplete: () => completeIssue(e.id!),
+                              inProgress: () => inProgressIssue(e.id!),
+                              onDelete: () => deleteIssue(e.id!)))
+                          .toList(),
+                      if (issues!.where((e) => e.status == filter).isEmpty)
+                        Center(child: Text("No issues found"))
+                    ],
+                  )),
+        ));
   }
 }
 
@@ -236,6 +250,19 @@ class _IssueCard extends StatelessWidget {
                 style: GoogleFonts.openSans(color: Theme.of(context).colorScheme.onSurface),
               )
             ])),
+          if (issue.closedBy != null)
+            RichText(
+                text: TextSpan(children: [
+              TextSpan(
+                text: "Updated by: ",
+                style: GoogleFonts.openSans(
+                    fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+              ),
+              TextSpan(
+                text: issue.closedBy,
+                style: GoogleFonts.openSans(color: Theme.of(context).colorScheme.onSurface),
+              )
+            ])),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -247,7 +274,17 @@ class _IssueCard extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => UserAdminPage(email: issue.email))),
                       icon: const Icon(Icons.person))),
+<<<<<<< Updated upstream
               if (issue.status == IssueStatus.NEW && onComplete != null)
+=======
+              if (issue.status == IssueStatus.NEW && inProgress != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child:
+                        IconButton(onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
+              if ([IssueStatus.NEW, IssueStatus.IN_PROGRESS].contains(issue.status) &&
+                  onComplete != null)
+>>>>>>> Stashed changes
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: IconButton(onPressed: onComplete, icon: const Icon(Icons.check))),
