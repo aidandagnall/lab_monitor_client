@@ -283,13 +283,7 @@ class _IssueCard extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child:
-                        IconButton(onPressed: onComplete, icon: const Icon(Icons.pending_actions))),
-              if (issue.status == IssueStatus.NEW && onComplete != null)
-                if (issue.status == IssueStatus.NEW && inProgress != null)
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: IconButton(
-                          onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
+                        IconButton(onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
               if ([IssueStatus.NEW, IssueStatus.IN_PROGRESS].contains(issue.status) &&
                   onComplete != null)
                 Padding(
