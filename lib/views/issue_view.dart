@@ -271,6 +271,9 @@ class _IssueViewState extends State<IssueView> {
   }
 
   Future<String?> openScanner(BuildContext context) async {
+    setState(() {
+      qrCodeScan = null;
+    });
     final String? code = await Navigator.push(
         context,
         MaterialPageRoute(
