@@ -120,8 +120,22 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
                                           filter = value!;
                                         }))))
                       ]),
-                      ...issues!
-                          .where((e) => e.status == filter)
+                      ...(issues!.where((e) => e.status == filter).toList()
+                            ..sort((a, b) {
+                              if (a.dateSubmitted == null && b.dateSubmitted == null) {
+                                return 0;
+                              }
+                              if (filter == IssueStatus.RESOLVED) {
+                                if (a.dateSubmitted == null) {
+                                  return 1;
+                                }
+                                return b.dateSubmitted?.compareTo(a.dateSubmitted!) ?? 1;
+                              }
+                              if (a.dateSubmitted == null) {
+                                return -1;
+                              }
+                              return a.dateSubmitted?.compareTo(b.dateSubmitted!) ?? -1;
+                            }))
                           .map((e) => _IssueCard(
                                 issue: e,
                                 onComplete: () => completeIssue(e.id!),
