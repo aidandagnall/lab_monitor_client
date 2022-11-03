@@ -317,11 +317,73 @@ class _IssueCard extends StatelessWidget {
               if (onDelete != null)
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: IconButton(onPressed: onDelete, icon: const Icon(Icons.close))),
+                    child: IconButton(
+                        onPressed: () => confirmDeletion(context, onDelete),
+                        icon: const Icon(Icons.close))),
             ],
           )
         ],
       ),
     ));
+  }
+
+  void confirmDeletion(BuildContext context, void Function()? onDelete) async {
+    final result = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => Center(
+            child: FractionallySizedBox(
+                widthFactor: 0.7,
+                child: Card(
+                    child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Are you sure you want to delete this issue?",
+                              style: GoogleFonts.openSans(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text(
+                                    "Yes",
+                                    style: GoogleFonts.openSans(),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 4,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    foregroundColor: Theme.of(context).colorScheme.onError,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: Text(
+                                    "No",
+                                    style: GoogleFonts.openSans(),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 4,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                                    backgroundColor: Theme.of(context).colorScheme.surface,
+                                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ))))));
+    if (result == true) {
+      onDelete!();
+    }
   }
 }

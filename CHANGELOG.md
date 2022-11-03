@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created CHANGELOG.md
 - Add button to revert issue to "New" status on Issue Admin page
 - Add button to revert issue to "In Progress" from resolved status on Issue Admin page
+- Add confirmation dialog when deleting an issue in admin screen
 
 ### Changed
 
