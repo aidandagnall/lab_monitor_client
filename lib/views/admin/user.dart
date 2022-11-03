@@ -78,7 +78,7 @@ class _UserAdminPageState extends State<UserAdminPage> {
                                 onPressed: () async {
                                   final u = await UserApi().getUser(
                                       (await auth.getStoredCredentials())!.accessToken,
-                                      emailController.text);
+                                      emailController.text.trim());
                                   setState(() {
                                     user = u;
                                   });
