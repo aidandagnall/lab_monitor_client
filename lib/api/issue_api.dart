@@ -50,6 +50,15 @@ class IssueApi {
     return false;
   }
 
+  Future<bool> markIssueAsNew(String token, int issueId) async {
+    final response = await client.post(UriFactory.getRoute('issue/$issueId/new'),
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   Future<bool> deleteIssue(String token, int issueId) async {
     final response = await client.delete(UriFactory.getRoute('issue/$issueId'),
         headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
