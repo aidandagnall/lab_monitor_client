@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Created CHANGELOG.md
+- Add button to revert issue to "New" status on Issue Admin page
 
 ### Changed
 
