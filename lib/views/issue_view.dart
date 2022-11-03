@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab_availability_checker/models/issues/issue.dart';
 import 'package:lab_availability_checker/providers/auth_provider.dart';
@@ -56,6 +57,8 @@ class _IssueViewState extends State<IssueView> {
                                 child: TextFormField(
                                   initialValue: null,
                                   controller: locationIdController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                   style: GoogleFonts.openSans(fontSize: 16),
                                   cursorHeight: 20,
                                   validator: (value) {
