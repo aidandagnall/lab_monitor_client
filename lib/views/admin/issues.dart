@@ -310,6 +310,10 @@ class _IssueCard extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: IconButton(onPressed: onComplete, icon: const Icon(Icons.check))),
+              if (issue.status == IssueStatus.RESOLVED && inProgress != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: IconButton(onPressed: inProgress, icon: const Icon(Icons.undo))),
               if (onDelete != null)
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
