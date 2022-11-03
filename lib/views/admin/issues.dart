@@ -55,6 +55,18 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
     });
   }
 
+  void markAsNew(int id) async {
+    final success = await IssueApi()
+        .markIssueAsNew((await widget.auth.getStoredCredentials())!.accessToken, id);
+    if (!success) {
+      return;
+    }
+    final index = issues!.indexWhere((e) => e.id == id);
+    setState(() {
+      issues![index] = issues![index].copyWith(IssueStatus.NEW);
+    });
+  }
+
   void inProgressIssue(int id) async {
     final success = await IssueApi()
         .markIssueInProgress((await widget.auth.getStoredCredentials())!.accessToken, id);
@@ -111,10 +123,12 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
                       ...issues!
                           .where((e) => e.status == filter)
                           .map((e) => _IssueCard(
-                              issue: e,
-                              onComplete: () => completeIssue(e.id!),
-                              inProgress: () => inProgressIssue(e.id!),
-                              onDelete: () => deleteIssue(e.id!)))
+                                issue: e,
+                                onComplete: () => completeIssue(e.id!),
+                                inProgress: () => inProgressIssue(e.id!),
+                                onDelete: () => deleteIssue(e.id!),
+                                markAsNew: () => markAsNew(e.id!),
+                              ))
                           .toList(),
                       if (issues!.where((e) => e.status == filter).isEmpty)
                         const Center(child: Text("No issues found"))
@@ -125,14 +139,17 @@ class _IssuesAdminPageState extends State<IssuesAdminPage> {
 }
 
 class _IssueCard extends StatelessWidget {
-  const _IssueCard(
-      {required this.issue,
-      required this.onComplete,
-      required this.inProgress,
-      required this.onDelete});
+  const _IssueCard({
+    required this.issue,
+    required this.onComplete,
+    required this.inProgress,
+    required this.onDelete,
+    required this.markAsNew,
+  });
   final void Function()? onComplete;
   final void Function()? inProgress;
   final void Function()? onDelete;
+  final void Function()? markAsNew;
   final Issue issue;
   @override
   Widget build(BuildContext context) {
@@ -284,6 +301,10 @@ class _IssueCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child:
                         IconButton(onPressed: inProgress, icon: const Icon(Icons.pending_actions))),
+              if (issue.status == IssueStatus.IN_PROGRESS && markAsNew != null)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: IconButton(onPressed: markAsNew, icon: const Icon(Icons.undo))),
               if ([IssueStatus.NEW, IssueStatus.IN_PROGRESS].contains(issue.status) &&
                   onComplete != null)
                 Padding(
