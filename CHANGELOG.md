@@ -18,3 +18,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Location ID input on Issue screen only allows digits
 - Location ID input on Issue screen uses numerical input keyboard
+- Trim query string when searching for User
