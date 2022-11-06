@@ -7,7 +7,7 @@ Created on 2022-11-03, starting from version 1.1.5.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.5]
 
 ### Added
 
@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add button to revert issue to "In Progress" from resolved status on Issue Admin page
 - Add confirmation dialog when deleting an issue in admin screen
 - Add sort for issues in admin screen when filter is resolved
+- Added LICENSE.md
+- Updated README.md with new information and store links
 
 ### Changed
 
