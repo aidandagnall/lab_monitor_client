@@ -109,6 +109,8 @@ class Issue {
       subSubCategory: subSubCategory,
       description: description,
       status: status,
+      dateSubmitted: dateSubmitted,
+      closedBy: closedBy,
     );
   }
 }
